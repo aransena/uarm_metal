@@ -316,13 +316,23 @@ class UARM_interface():
                 msgs = []
                 while self.uarm_read_queue.qsize() > 0:
                     try:
-                        msgs.append(self.uarm_read_queue.get(blocking))
+                        msg = self.uarm_read_queue.get(blocking)
+                        try:
+                            msg = msg[1:]
+                        except:
+                            pass
+                        msgs.append()
                     except Queue.Empty:
                         msgs = []
                 return msgs
             else:
                 try:
                     msg = self.uarm_read_queue.get(blocking)
+                    try:
+                        msg = msg[1:]
+                    except:
+                        pass
+                    
                 except Queue.Empty:
                     msg = ""
                 return msg
