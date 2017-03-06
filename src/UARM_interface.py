@@ -75,8 +75,10 @@ class UARM_interface():
         rospy.signal_shutdown("Shutdown function call")
         start_shutdown = time.time()
         while self.uarm_interface_thread.is_alive() or self.uarm_read_thread.is_alive():
-            self.send_to_interface_queue("SHUTDOWN", priority=True)
-            self.send_to_read_queue("SHUTDOWN", priority=True)
+            # self.send_to_interface_queue("SHUTDOWN", priority=True)
+            # self.send_to_read_queue("SHUTDOWN", priority=True)
+            self.send_to_interface_queue("SHUTDOWN", priority=1)
+            self.send_to_read_queue("SHUTDOWN", priority=1)
 
             if time.time()-start_shutdown > 5:
                 break
@@ -136,6 +138,7 @@ class UARM_interface():
                 try:
                     self.send_to_read_queue(curr_vals)
                 except Exception as e:
+                    print "Error: ", e
                     rospy.logerr("Error writing to queue. Queue probably shutdown.")
                     break
                 time.sleep(1.0/self.ros_hz)
@@ -250,7 +253,8 @@ class UARM_interface():
             if msgs is not []:
                 # print n, " messages filtered matching search terms", filter, invert
                 # print msgs
-                self.send_to_interface_queue(msgs, msg_list=True, priority=True)
+                #self.send_to_interface_queue(msgs, msg_list=True, priority=True)
+                self.send_to_interface_queue(msgs, msg_list=True, priority=1)
 
     def get_from_interface_queue(self, all_msgs=False, blocking=False):
         with self.interface_queue_get_lock:
@@ -321,9 +325,10 @@ class UARM_interface():
         elif data.data[0] == "!":
                 msg = data.data[1:]
                 #print msg
-                self.send_to_interface_queue(msg, priority=True)
+                #self.send_to_interface_queue(msg, priority=True)
+                self.send_to_interface_queue(msg, priority=1)
         else:
-                self.send_to_interface_queue(data.data, priority=False)
+                self.send_to_interface_queue(data.data)
 
     def playback(self):
         if self.playback_data:
@@ -404,7 +409,8 @@ class UARM_interface():
                 self.playback_thread.start()
         if command == "BEEP":
             self.uarm.set_buzzer(10000, 0.1)
-            self.send_to_read_queue("DONE", priority=True)
+            #self.send_to_read_queue("DONE", priority=True)
+            self.send_to_read_queue("DONE", priority=1)
             self.playback_active = False
 
         if command == "STOP":
