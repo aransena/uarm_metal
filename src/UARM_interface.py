@@ -56,7 +56,10 @@ class UARM_interface():
                     return line[1]
                 else:
                     if list:
-                        return float(line[1:-1])
+                        try:
+                            return float(line[1:-1])
+                        except Exception as e:
+                            print e
                     else:
                         return float(line[1])
 
