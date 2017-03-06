@@ -104,7 +104,7 @@ class UARM_interface():
         rospy.loginfo("Done loading parameters.")
 
     def start_threads(self):
-        rospy.loginfo("Starting threads.... Connected? - ", self.connected)
+        rospy.loginfo("Starting threads")
         if self.connected is True:
             self.uarm_read_thread = threading.Thread(target=self.uarm_read)
             self.uarm_interface_thread = threading.Thread(target=self.uarm_interface)
