@@ -141,7 +141,7 @@ class UARM_interface():
         elif self.read_ja == 1:
             msg.append(self.read_joint_angles())
         elif self.read_AI[0] == 1:
-            for i in self.read_AI[1:]
+            for i in self.read_AI[1:]:
                 msg.append(self.read_analog(i))
         return msg
     def uarm_interface(self):
