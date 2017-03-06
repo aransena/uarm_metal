@@ -160,13 +160,13 @@ class UARM_interface():
                     print "Error: ", e
                     rospy.logerr("Error writing to queue. Queue probably shutdown.")
                     break
-                #time.sleep(1.0/self.ros_hz)
-                try:
-                    self.ja = curr_vals[1]
-                except Exception as e:
-                    err = str(e.message)
-                    rospy.logerr("uArm not ready! " + err)
-                    rospy.signal_shutdown("Error reading from uArm")
+                
+                # try:
+                #     self.ja = curr_vals[1]
+                # except Exception as e:
+                #     err = str(e.message)
+                #     rospy.logerr("uArm not ready! " + err)
+                #     rospy.signal_shutdown("Error reading from uArm")
 
                 if self.playback_active is False and self.loading is False:
                     self.send_to_interface_queue("READ")
