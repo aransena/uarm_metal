@@ -105,7 +105,6 @@ class UARM_interface():
         self.read_pos = self.get_setting("read_pos")
         self.read_ja = self.get_setting("read_ja")
         self.read_AI = self.get_setting("read_AI",list=True)
-        print self.read_AI
 
         self.uarm_read_pub = rospy.Publisher('uarm_read', String, queue_size=10)
         rospy.Subscriber("uarm_write", String, self.uarm_write_callback)
@@ -143,9 +142,9 @@ class UARM_interface():
         print "here"
         if self.read_pos == 1:
             msg.append(self.read_position())
-        elif self.read_ja == 1:
+        if self.read_ja == 1:
             msg.append(self.read_joint_angles())
-        elif self.read_AI[0] == 1:
+        if self.read_AI[0] == 1:
             for i in self.read_AI[1:]:
                 msg.append(self.read_analog(i))
 
