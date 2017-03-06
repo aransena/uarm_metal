@@ -56,8 +56,8 @@ class UARM_interface():
                     return line[1]
                 else:
                     if list:
-                        print line
-                        return float(line[1:])
+                        print line[1:-1]
+                        return float(line[1:-1])
                     else:
                         return float(line[1])
 
