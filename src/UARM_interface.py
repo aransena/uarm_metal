@@ -263,7 +263,11 @@ class UARM_interface():
                 while self.uarm_interface_queue.qsize() > 0:
                     try:
                         msg = self.uarm_interface_queue.get(blocking)
-                        msg = msg[1]
+                        try:
+                            msg = msg[1]
+                        except:
+                            pass
+                        print msg
                         msgs.append(msg)
 
                     except Queue.Empty:
@@ -275,7 +279,11 @@ class UARM_interface():
                     msg = self.uarm_interface_queue.get(blocking)
                 except Queue.Empty:
                     msg = ""
-                msg = msg[1]
+                try:
+                    msg = msg[1]
+                except:
+                    pass
+                print msg
                 return msg
 
     def send_to_read_queue(self, msg, msg_list=False, priority=10):
