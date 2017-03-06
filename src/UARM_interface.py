@@ -146,8 +146,6 @@ class UARM_interface():
         if self.read_AI[0] == 1:
             for i in self.read_AI[1:]:
                 msg.append(self.read_analog(i))
-
-        print msg
         return msg
 
     def uarm_interface(self):
