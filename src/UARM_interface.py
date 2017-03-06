@@ -13,8 +13,10 @@ def ros_try_catch(fn):
             try:
                 print "attempting.."
                 fn(*args, **kwargs)
+                print "done"
                # return True
             except Exception as e:
+                print "error"
                 err_msg = "Error in function '" + fn.func_name + "': " + e.message
                 rospy.signal_shutdown(err_msg)
                # return False
