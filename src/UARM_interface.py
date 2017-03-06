@@ -8,18 +8,17 @@ import rospy
 from std_msgs.msg import String
 
 
-def ros_try_catch(fn):
-    def decorator(fn):
-        def try_catch():
+def ros_try_catch(function):
+        def try_catch(*args, **kwargs):
             try:
-                fn()
-                return True
+                function(*args, **kwargs)
+               # return True
             except Exception as e:
                 err_msg = "Error in function '" + fn.func_name + "': " + e.message
                 rospy.signal_shutdown(err_msg)
-                return False
+               # return False
         return try_catch
-    return decorator
+
 
 
 class UARM_interface():
