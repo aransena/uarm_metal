@@ -283,7 +283,6 @@ class UARM_interface():
                     msg = msg[1]
                 except:
                     pass
-                print msg
                 return msg
 
     def send_to_read_queue(self, msg, msg_list=False, priority=10):
@@ -332,7 +331,7 @@ class UARM_interface():
                         msg = msg[1:]
                     except:
                         pass
-                    
+
                 except Queue.Empty:
                     msg = ""
                 return msg
