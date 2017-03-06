@@ -12,9 +12,7 @@ def ros_try_catch(fn):
         def try_catch(*args, **kwargs):
             try:
                 print "attempting.."
-                fn(*args, **kwargs)
-                print "done"
-               # return True
+                return fn(*args, **kwargs)
             except Exception as e:
                 print "error"
                 err_msg = "Error in function '" + fn.func_name + "': " + e.message
