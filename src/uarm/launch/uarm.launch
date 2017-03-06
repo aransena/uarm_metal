@@ -1,0 +1,3 @@
+<launch>
+	<node name="uarm" pkg="uarm" type="uarm.py" respawn="true"/>
+</launch>
