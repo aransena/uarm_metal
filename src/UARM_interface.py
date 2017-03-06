@@ -117,7 +117,8 @@ class UARM_interface():
             self.request_detach()
 
         else:
-            print "Startup error"
+            rospy.logerror("Startup error")
+            rospy.signal_shutdown("Startup error")
 
     def uarm_interface(self):
         rospy.loginf("uarm_interface running")
@@ -131,7 +132,7 @@ class UARM_interface():
                 except Exception as e:
                     rospy.logerror("uArm not ready! ", e)
                     rospy.signal_shutdown("Error reading from uArm")
-                    
+
                 if self.playback_active is False and self.loading is False:
                     self.send_to_interface_queue("READ")
 
