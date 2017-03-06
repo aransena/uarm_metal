@@ -11,16 +11,12 @@ from std_msgs.msg import String
 def ros_try_catch(fn):
         def try_catch(*args, **kwargs):
             try:
-                print "attempting.."
                 return fn(*args, **kwargs)
             except Exception as e:
-                print "error"
                 err_msg = "Error in function '" + fn.func_name + "': " + e.message
                 rospy.signal_shutdown(err_msg)
                # return False
         return try_catch
-
-
 
 class UARM_interface():
     def __init__(self):
