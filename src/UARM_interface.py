@@ -8,10 +8,11 @@ import rospy
 from std_msgs.msg import String
 
 
-def ros_try_catch(function):
+def ros_try_catch(fn):
         def try_catch(*args, **kwargs):
             try:
-                function(*args, **kwargs)
+                print "attempting.."
+                fn(*args, **kwargs)
                # return True
             except Exception as e:
                 err_msg = "Error in function '" + fn.func_name + "': " + e.message
