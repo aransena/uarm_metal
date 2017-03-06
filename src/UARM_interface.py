@@ -19,6 +19,7 @@ def ros_try_catch(fn):
         return try_catch
 
 class UARM_interface():
+
     def __init__(self):
         self.uarm = None
         self.connected = False
@@ -65,7 +66,7 @@ class UARM_interface():
             rospy.loginfo("Connected")
         except Exception as e:
             self.connected = False
-            err =  str(e.message)
+            err = str(e.message)
             rospy.logerr("Connection error: " + err)
             rospy.signal_shutdown("Connection error")
 
@@ -93,13 +94,17 @@ class UARM_interface():
         f.close()
 
         self.ros_hz = self.get_setting("ros_hz")
+
         self.uarm_read_pub = rospy.Publisher('uarm_read', String, queue_size=10)
         rospy.Subscriber("uarm_write", String, self.uarm_write_callback)
         rospy.init_node('uarm_node', anonymous=True)
         self.ros_rate = rospy.Rate(self.ros_hz)
 
-        self.uarm_read_queue = Queue.Queue()
-        self.uarm_interface_queue = Queue.Queue()
+        #self.uarm_read_queue = Queue.Queue()
+        #self.uarm_interface_queue = Queue.Queue()
+
+        self.uarm_read_queue = Queue.PriorityQueue()
+        self.uarm_interface_queue = Queue.PriorityQueue()
 
         rospy.loginfo("Done loading parameters.")
 
@@ -125,12 +130,13 @@ class UARM_interface():
         rospy.loginfo("uarm_interface running")
         while True and (rospy.is_shutdown() is False):
             request = self.get_from_interface_queue()
-            #print self.uarm_interface_queue.qsize()
+            # print self.uarm_interface_queue.qsize()
             if request == "READ":
                 curr_vals = self.read_position()
                 try:
                     self.send_to_read_queue(curr_vals)
-                except:
+                except Exception as e:
+                    rospy.logerr("Error writing to queue. Queue probably shutdown.")
                     break
                 time.sleep(1.0/self.ros_hz)
                 try:
@@ -153,11 +159,9 @@ class UARM_interface():
         rospy.loginfo("uarm_interface shutdown")
         self.shutdown()
 
-
     def request_detach(self):
         rospy.loginfo("uArm detach")
         self.send_to_interface_queue("DET")
-
 
     def request_attach(self):
         rospy.loginfo("uArm attach")
@@ -185,7 +189,7 @@ class UARM_interface():
 
     @ros_try_catch
     def read_joint_angles(self):
-        #return [self.get_joint_angles(), time.time()]
+        # return [self.get_joint_angles(), time.time()]
         return self.get_joint_angles()
 
     def uarm_read(self):
@@ -208,25 +212,33 @@ class UARM_interface():
 
         rospy.loginfo("uarm_read shutdown")
 
-    def send_to_interface_queue(self, msg, msg_list=False, priority=False):
+    def send_to_interface_queue(self, msg, msg_list=False, priority=10):
         with self.interface_queue_put_lock:
             if msg_list:
-                if priority:
-                    msg_list = msg + self.get_from_interface_queue(all_msgs=True)
                 for m in msg_list:
-                    self.uarm_interface_queue.put(m)
+                    self.uarm_interface_queue.put(priority,m)
             else:
-                if priority:
-                    msg_list = [msg] + self.get_from_interface_queue(all_msgs=True)
-                    for m in msg_list:
-                        self.uarm_interface_queue.put(m)
-                else:
-                    self.uarm_interface_queue.put(msg)
+                self.uarm_interface_queue.put(priority, msg)
+
+    # def send_to_interface_queue(self, msg, msg_list=False, priority=False):
+    #     with self.interface_queue_put_lock:
+    #         if msg_list:
+    #             if priority:
+    #                 msg_list = msg + self.get_from_interface_queue(all_msgs=True)
+    #             for m in msg_list:
+    #                 self.uarm_interface_queue.put(m)
+    #         else:
+    #             if priority:
+    #                 msg_list = [msg] + self.get_from_interface_queue(all_msgs=True)
+    #                 for m in msg_list:
+    #                     self.uarm_interface_queue.put(m)
+    #             else:
+    #                 self.uarm_interface_queue.put(msg)
 
     def filter_interface_queue(self, msg_filter, invert=False):
         msgs = self.get_from_interface_queue(all_msgs=True, blocking=True)
         if msg_filter is not "":
-            #print "FILTER: ", filter
+            # print "FILTER: ", filter
             n = 0
             for i, msg in enumerate(msgs):
                 if filter in msg and not invert:
@@ -236,8 +248,8 @@ class UARM_interface():
                     msgs.pop(i)
                     n += 1
             if msgs is not []:
-                #print n, " messages filtered matching search terms", filter, invert
-                #print msgs
+                # print n, " messages filtered matching search terms", filter, invert
+                # print msgs
                 self.send_to_interface_queue(msgs, msg_list=True, priority=True)
 
     def get_from_interface_queue(self, all_msgs=False, blocking=False):
@@ -259,21 +271,30 @@ class UARM_interface():
                     msg = ""
                 return msg
 
-    def send_to_read_queue(self, msg, msg_list=False, priority=False):
+    def send_to_read_queue(self, msg, msg_list=False, priority=10):
         with self.read_queue_put_lock:
             if msg_list:
-                if priority:
-                    msg_list = msg + self.get_from_read_queue(all_msgs=True)
                 for m in msg_list:
-                    self.uarm_read_queue.put(m)
+                    self.uarm_read_queue.put(priority,m)
             else:
-                if priority:
-                    #print "Sending priority message, read_queue:", msg
-                    msg_list = [msg] + self.get_from_read_queue(all_msgs=True)
-                    for m in msg_list:
-                        self.uarm_read_queue.put(m)
                 else:
-                    self.uarm_read_queue.put(msg)
+                    self.uarm_read_queue.put(priority,msg)
+
+    # def send_to_read_queue(self, msg, msg_list=False, priority=False):
+    #     with self.read_queue_put_lock:
+    #         if msg_list:
+    #             if priority:
+    #                 msg_list = msg + self.get_from_read_queue(all_msgs=True)
+    #             for m in msg_list:
+    #                 self.uarm_read_queue.put(m)
+    #         else:
+    #             if priority:
+    #                 # print "Sending priority message, read_queue:", msg
+    #                 msg_list = [msg] + self.get_from_read_queue(all_msgs=True)
+    #                 for m in msg_list:
+    #                     self.uarm_read_queue.put(m)
+    #             else:
+    #                 self.uarm_read_queue.put(msg)
 
     def get_from_read_queue(self, all_msgs=False, blocking=False):
         with self.read_queue_get_lock:
@@ -293,7 +314,7 @@ class UARM_interface():
                 return msg
 
     def uarm_write_callback(self, data):
-        #print "DATA: ", data.data
+        # print "DATA: ", data.data
         if data.data == "CLEAR":
                 self.get_from_interface_queue(all_msgs=True)
                 self.get_from_read_queue(all_msgs=True)
@@ -316,18 +337,17 @@ class UARM_interface():
                                              str(joint_angles[2]) +
                                              str(joint_angles[3]))
             except Exception as e:
-                #print "joint angles not ready yet: ", e
+                # print "joint angles not ready yet: ", e
                 err = str(e.message)
                 rospy.logerr("joint angles not ready yet: " + err)
                 rospy.signal_shutdown("joint angles not ready yet")
-
 
             self.send_to_interface_queue("ATT")
 
             self.filter_interface_queue("READ")
 
             for line in self.playback_data:
-                #print self.playback_active, line
+                # print self.playback_active, line
                 if self.playback_active is False:
                     self.get_from_interface_queue(all_msgs=True)
                     break
@@ -365,7 +385,7 @@ class UARM_interface():
 
         if command[0:3] == "REL":
             adjust = float(command[3:])
-            #print adjust
+            # print adjust
             self.uarm.set_position(x=0, y=0, z=adjust, speed=0, relative=True)
 
         if command[0:2] == "JA" and self.playback_active:
