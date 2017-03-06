@@ -56,6 +56,7 @@ class UARM_interface():
                     return line[1]
                 else:
                     if list:
+                        print line
                         return float(line[1:])
                     else:
                         return float(line[1])
@@ -100,11 +101,9 @@ class UARM_interface():
 
         self.ros_hz = self.get_setting("ros_hz")
         self.read_pos = self.get_setting("read_pos")
-        print self.read_pos
         self.read_ja = self.get_setting("read_ja")
-        print self.read_ja
         self.read_AI = self.get_setting("read_AI",list=True)
-        print self.read_AI
+
 
         self.uarm_read_pub = rospy.Publisher('uarm_read', String, queue_size=10)
         rospy.Subscriber("uarm_write", String, self.uarm_write_callback)
