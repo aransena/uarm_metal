@@ -220,9 +220,9 @@ class UARM_interface():
         with self.interface_queue_put_lock:
             if msg_list:
                 for m in msg_list:
-                    self.uarm_interface_queue.put(priority,m)
+                    self.uarm_interface_queue.put((priority,m))
             else:
-                self.uarm_interface_queue.put(priority, msg)
+                self.uarm_interface_queue.put((priority, msg))
 
     # def send_to_interface_queue(self, msg, msg_list=False, priority=False):
     #     with self.interface_queue_put_lock:
@@ -280,9 +280,9 @@ class UARM_interface():
         with self.read_queue_put_lock:
             if msg_list:
                 for m in msg_list:
-                    self.uarm_read_queue.put(priority,m)
+                    self.uarm_read_queue.put((priority,m))
             else:
-                self.uarm_read_queue.put(priority,msg)
+                self.uarm_read_queue.put((priority,msg))
 
     # def send_to_read_queue(self, msg, msg_list=False, priority=False):
     #     with self.read_queue_put_lock:
