@@ -80,7 +80,7 @@ class UARM_interface():
             # self.send_to_read_queue("SHUTDOWN", priority=True)
             self.send_to_interface_queue("SHUTDOWN", priority=1)
             self.send_to_read_queue("SHUTDOWN", priority=1)
-
+            time.sleep(0.5)
             if time.time()-start_shutdown > 5:
                 break
         self.alive = False
@@ -133,7 +133,7 @@ class UARM_interface():
         rospy.loginfo("uarm_interface running")
         while True and (rospy.is_shutdown() is False):
             request = self.get_from_interface_queue()
-            print self.uarm_read_queue.qsize()
+            print request
             if request == "READ":
                 curr_vals = self.read_position()
                 try:
@@ -282,7 +282,6 @@ class UARM_interface():
                 for m in msg:
                     self.uarm_read_queue.put((priority,m))
             else:
-                print msg
                 self.uarm_read_queue.put((priority,msg))
 
     # def send_to_read_queue(self, msg, msg_list=False, priority=False):
