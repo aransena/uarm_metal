@@ -13,7 +13,7 @@ def ros_try_catch(fn):
             try:
                 return fn(*args, **kwargs)
             except Exception as e:
-                err_msg = "Error in function '" + fn.func_name + "': " + e.message
+                err_msg = "Error in function '" + fn.func_name + "': " + str(e.message)
                 rospy.signal_shutdown(err_msg)
                # return False
         return try_catch
@@ -63,7 +63,7 @@ class UARM_interface():
             rospy.loginfo("Connected")
         except Exception as e:
             self.connected = False
-            rospy.logerr("Connection error: ", e.message)
+            rospy.logerr("Connection error: ", str(e.message))
             rospy.signal_shutdown("Connection error")
 
     def shutdown(self):
@@ -131,7 +131,7 @@ class UARM_interface():
                 try:
                     self.ja = curr_vals[1]
                 except Exception as e:
-                    rospy.logerr("uArm not ready! ", e.message)
+                    rospy.logerr("uArm not ready! ", str(e.message))
                     rospy.signal_shutdown("Error reading from uArm")
 
                 if self.playback_active is False and self.loading is False:
@@ -302,7 +302,7 @@ class UARM_interface():
                                              str(joint_angles[3]))
             except Exception as e:
                 #print "joint angles not ready yet: ", e
-                rospy.logerr("joint angles not ready yet: ", e.message)
+                rospy.logerr("joint angles not ready yet: ", str(e.message))
                 rospy.signal_shutdown("joint angles not ready yet")
 
 
