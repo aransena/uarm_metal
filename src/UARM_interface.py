@@ -121,7 +121,7 @@ class UARM_interface():
             rospy.signal_shutdown("Startup error")
 
     def uarm_interface(self):
-        rospy.loginf("uarm_interface running")
+        rospy.loginfo("uarm_interface running")
         while True and (rospy.is_shutdown() is False):
             request = self.get_from_interface_queue()
             if request == "READ":
