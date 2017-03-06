@@ -70,11 +70,11 @@ class UARM_interface():
         rospy.signal_shutdown("Shutdown function call")
         start_shutdown = time.time()
         while self.uarm_interface_thread.is_alive() or self.uarm_read_thread.is_alive():
-            print "Shutdown interface queue"
+            #print "Shutdown interface queue"
             self.send_to_interface_queue("SHUTDOWN", priority=True)
-            print "Shutdown read queue"
+            #print "Shutdown read queue"
             self.send_to_read_queue("SHUTDOWN", priority=True)
-            print "Thread status: ", self.uarm_interface_thread.is_alive(), self.uarm_read_thread.is_alive()
+            #print "Thread status: ", self.uarm_interface_thread.is_alive(), self.uarm_read_thread.is_alive()
 
             if time.time()-start_shutdown > 5:
                 break
@@ -141,7 +141,7 @@ class UARM_interface():
                 if self.playback_active is False and self.loading is False:
                     self.send_to_interface_queue("READ")
 
-        print "uarm_interface shutdown"
+        rospy.loginfo("uarm_interface shutdown")
 
     @ros_try_catch
     def request_detach(self):
@@ -188,7 +188,7 @@ class UARM_interface():
                 self.uarm_read_pub.publish(msg)
                 self.ros_rate.sleep()
 
-        print "uarm_read shutdown"
+        rospy.loginfo("uarm_read shutdown")
 
     def send_to_interface_queue(self, msg, msg_list=False, priority=False):
         with self.interface_queue_put_lock:
