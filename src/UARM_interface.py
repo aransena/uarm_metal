@@ -128,8 +128,10 @@ class UARM_interface():
             #print self.uarm_interface_queue.qsize()
             if request == "READ":
                 curr_vals = self.read_position()
-                self.send_to_read_queue(curr_vals)
-                print self.uarm_read_queue.qsize()
+                try:
+                    self.send_to_read_queue(curr_vals)
+                except:
+                    break
                 time.sleep(1.0/self.ros_hz)
                 try:
                     self.ja = curr_vals[1]
