@@ -131,7 +131,7 @@ class UARM_interface():
                 try:
                     self.ja = curr_vals[1]
                 except Exception as e:
-                    print "curr vals not ready! ", e
+                    print curr_vals, "curr vals not ready! ", e
                     pass
                 if self.playback_active is False and self.loading is False:
                     self.send_to_interface_queue("READ")
@@ -169,11 +169,13 @@ class UARM_interface():
 
     @ros_try_catch
     def read_position(self):
-            return [self.get_ee(), time.time()]
+            #return [self.get_ee(), time.time()]
+        return self.get_ee()
 
     @ros_try_catch
     def read_joint_angles(self):
-        return [self.get_joint_angles(), time.time()]
+        #return [self.get_joint_angles(), time.time()]
+        return self.get_joint_angles()
 
     def uarm_read(self):
         print "uarm_read running"
