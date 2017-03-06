@@ -120,7 +120,7 @@ class UARM_interface():
             print "Startup error"
 
     def uarm_interface(self):
-        print "uarm_interface running"
+        rospy.loginf("uarm_interface running")
         while True and (rospy.is_shutdown() is False):
             request = self.get_from_interface_queue()
             if request == "READ":
@@ -129,8 +129,9 @@ class UARM_interface():
                 try:
                     self.ja = curr_vals[1]
                 except Exception as e:
-                    print curr_vals, "curr vals not ready! ", e
-                    pass
+                    rospy.logerror("uArm not ready! ", e)
+                    rospy.signal_shutdown("Error reading from uArm")
+                    
                 if self.playback_active is False and self.loading is False:
                     self.send_to_interface_queue("READ")
 
