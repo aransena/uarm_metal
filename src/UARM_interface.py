@@ -130,6 +130,7 @@ class UARM_interface():
                 curr_vals = self.read_position()
                 self.send_to_read_queue(curr_vals)
                 print self.uarm_read_queue.qsize()
+                time.sleep(1.0/self.ros_rate)
                 try:
                     self.ja = curr_vals[1]
                 except Exception as e:
