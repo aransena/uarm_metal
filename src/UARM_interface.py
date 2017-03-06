@@ -141,7 +141,7 @@ class UARM_interface():
                     print "Error: ", e
                     rospy.logerr("Error writing to queue. Queue probably shutdown.")
                     break
-                time.sleep(1.0/self.ros_hz)
+                #time.sleep(1.0/self.ros_hz)
                 try:
                     self.ja = curr_vals[1]
                 except Exception as e:
@@ -211,7 +211,7 @@ class UARM_interface():
                 msg = str(robot_values)
                 msg = msg.translate(None, '[]')
                 self.uarm_read_pub.publish(msg)
-                self.ros_rate.sleep()
+                #self.ros_rate.sleep()
 
         rospy.loginfo("uarm_read shutdown")
 
