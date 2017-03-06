@@ -273,6 +273,7 @@ class UARM_interface():
                     msg = self.uarm_interface_queue.get(blocking)
                 except Queue.Empty:
                     msg = ""
+                print msg
                 return msg[1]
 
     def send_to_read_queue(self, msg, msg_list=False, priority=10):
