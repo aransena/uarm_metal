@@ -277,8 +277,7 @@ class UARM_interface():
                 for m in msg_list:
                     self.uarm_read_queue.put(priority,m)
             else:
-                else:
-                    self.uarm_read_queue.put(priority,msg)
+                self.uarm_read_queue.put(priority,msg)
 
     # def send_to_read_queue(self, msg, msg_list=False, priority=False):
     #     with self.read_queue_put_lock:
