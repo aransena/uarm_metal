@@ -147,6 +147,7 @@ class UARM_interface():
                     self.send_to_interface_queue("READ")
 
         rospy.loginfo("uarm_interface shutdown")
+        self.shutdown()
 
     @ros_try_catch
     def request_detach(self):
