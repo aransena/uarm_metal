@@ -80,7 +80,7 @@ class UARM_interface():
 
             if time.time()-start_shutdown > 5:
                 break
-
+        self.alive = False
         self.uarm.disconnect()
 
     def load_parameters(self):
