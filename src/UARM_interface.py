@@ -163,17 +163,12 @@ class UARM_interface():
         return round(self.uarm.get_analog(pin_num), 3)
 
     @ros_try_catch
-    def get_ee(self):
-        return self.uarm.get_position()
-
-    @ros_try_catch
     def get_joint_angles(self):
         return self.uarm.get_servo_angle()
 
     @ros_try_catch
     def read_position(self):
-            #return [self.get_ee(), time.time()]
-        return self.get_ee()
+        return self.uarm.get_position()
 
     @ros_try_catch
     def read_joint_angles(self):
