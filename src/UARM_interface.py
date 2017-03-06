@@ -149,7 +149,7 @@ class UARM_interface():
         while True and (rospy.is_shutdown() is False):
             request = self.get_from_interface_queue()
             if request == "READ":
-                curr_vals = get_read_data()
+                curr_vals = self.get_read_data()
                 try:
                     self.send_to_read_queue(curr_vals)
                 except Exception as e:
