@@ -92,7 +92,7 @@ class UARM_interface():
             self.settings.append(line.split(','))
         f.close()
 
-        self.ros_hz = self.get_setting("ros_rate")
+        self.ros_hz = self.get_setting("ros_hz")
         self.uarm_read_pub = rospy.Publisher('uarm_read', String, queue_size=10)
         rospy.Subscriber("uarm_write", String, self.uarm_write_callback)
         rospy.init_node('uarm_node', anonymous=True)
@@ -130,7 +130,7 @@ class UARM_interface():
                 curr_vals = self.read_position()
                 self.send_to_read_queue(curr_vals)
                 print self.uarm_read_queue.qsize()
-                time.sleep(1.0/self.ros_rate)
+                time.sleep(1.0/self.ros_hz)
                 try:
                     self.ja = curr_vals[1]
                 except Exception as e:
