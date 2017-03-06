@@ -139,7 +139,6 @@ class UARM_interface():
 
     def get_read_data(self):
         msg = []
-        print "here"
         if self.read_pos == 1:
             msg.append(self.read_position())
         if self.read_ja == 1:
