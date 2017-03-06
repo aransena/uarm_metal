@@ -63,7 +63,8 @@ class UARM_interface():
             rospy.loginfo("Connected")
         except Exception as e:
             self.connected = False
-            rospy.logerr("Connection error: ", str(e.message))
+            err =  str(e.message)
+            rospy.logerr("Connection error: ", err)
             rospy.signal_shutdown("Connection error")
 
     def shutdown(self):
@@ -131,7 +132,8 @@ class UARM_interface():
                 try:
                     self.ja = curr_vals[1]
                 except Exception as e:
-                    rospy.logerr("uArm not ready! ", str(e.message))
+                    err = str(e.message)
+                    rospy.logerr("uArm not ready! ", err)
                     rospy.signal_shutdown("Error reading from uArm")
 
                 if self.playback_active is False and self.loading is False:
@@ -302,7 +304,8 @@ class UARM_interface():
                                              str(joint_angles[3]))
             except Exception as e:
                 #print "joint angles not ready yet: ", e
-                rospy.logerr("joint angles not ready yet: ", str(e.message))
+                err = str(e.message)
+                rospy.logerr("joint angles not ready yet: ", err)
                 rospy.signal_shutdown("joint angles not ready yet")
 
 
