@@ -57,7 +57,7 @@ class UARM_interface():
                 else:
                     if list:
                         try:
-                            return float(line[1:-1])
+                            return map(float,line[1:-1])
                         except Exception as e:
                             print e
                     else:
