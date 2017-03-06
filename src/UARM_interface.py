@@ -45,18 +45,20 @@ class UARM_interface():
         self.playback_thread = None
         self.playback_active = False
         self.playback_data = []
-        self.playback_rate = 1.0
         self.loading = False
 
         self.ja = []
 
-    def get_setting(self, name, string_val=False):
+    def get_setting(self, name, string_val=False, list=False):
         for line in self.settings:
             if line[0] == name:
                 if string_val:
                     return line[1]
                 else:
-                    return float(line[1])
+                    if list:
+                        return float(line[1:])
+                    else:
+                        return float(line[1])
 
     def connect(self):
         try:
@@ -97,6 +99,9 @@ class UARM_interface():
         f.close()
 
         self.ros_hz = self.get_setting("ros_hz")
+        self.read_pos = self.get_setting("read_pos")
+        self.read_ja = self.get_setting("read_ja")
+        self.read_AI = self.get_setting("read_AI",list=True)
 
         self.uarm_read_pub = rospy.Publisher('uarm_read', String, queue_size=10)
         rospy.Subscriber("uarm_write", String, self.uarm_write_callback)
@@ -129,12 +134,22 @@ class UARM_interface():
             rospy.logerr("Startup error")
             rospy.signal_shutdown("Startup error")
 
+    def get_read_data(self):
+        msg = []
+        if self.read_pos == 1:
+            msg.append(self.read_position())
+        elif self.read_ja == 1:
+            msg.append(self.read_joint_angles())
+        elif self.read_AI[0] == 1:
+            for i in self.read_AI[1:]
+                msg.append(self.read_analog(i))
+        return msg
     def uarm_interface(self):
         rospy.loginfo("uarm_interface running")
         while True and (rospy.is_shutdown() is False):
             request = self.get_from_interface_queue()
             if request == "READ":
-                curr_vals = [self.read_position(),self.read_joint_angles(),self.read_analog(7)]
+                curr_vals = get_read_data()
                 try:
                     self.send_to_read_queue(curr_vals)
                 except Exception as e:

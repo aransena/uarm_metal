@@ -1,2 +1,4 @@
 ros_hz, 1000.0,
-playback_rate,20.0,
+read_pos,1,
+read_ja,0,
+read_AI,1,7,8,
