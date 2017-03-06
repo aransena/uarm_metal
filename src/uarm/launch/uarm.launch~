@@ -1,4 +1,0 @@
-<launch>
-	<include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
-	<node name="uarm" pkg="uarm" type="uarm.py" />
-</launch>
