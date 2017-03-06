@@ -1,2 +1,2 @@
-ros_hz, 100.0,
+ros_hz, 200.0,
 playback_rate,20.0,
