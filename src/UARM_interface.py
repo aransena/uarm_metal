@@ -125,10 +125,11 @@ class UARM_interface():
         rospy.loginfo("uarm_interface running")
         while True and (rospy.is_shutdown() is False):
             request = self.get_from_interface_queue()
-            print self.uarm_interface_queue.qsize()
+            #print self.uarm_interface_queue.qsize()
             if request == "READ":
                 curr_vals = self.read_position()
                 self.send_to_read_queue(curr_vals)
+                print curr_vals
                 try:
                     self.ja = curr_vals[1]
                 except Exception as e:
