@@ -1,4 +1,4 @@
-- git:
-    local-name: test_repo
-    uri: https://www.github.com/aransena/test_repo.git
-    version: master
+#- git:
+#    local-name: test_repo
+#    uri: https://www.github.com/aransena/test_repo.git
+#    version: master
