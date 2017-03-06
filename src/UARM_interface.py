@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import time
 import threading
 import Queue
@@ -15,7 +16,6 @@ def ros_try_catch(fn):
             except Exception as e:
                 err_msg = "Error in function '" + fn.func_name + "': " + str(e.message)
                 rospy.signal_shutdown(err_msg)
-               # return False
         return try_catch
 
 class UARM_interface():
@@ -60,6 +60,8 @@ class UARM_interface():
         try:
             self.uarm = pyuarm.get_uarm()
             self.connected = True
+            self.load_parameters()
+            self.start_threads()
             rospy.loginfo("Connected")
         except Exception as e:
             self.connected = False
@@ -72,11 +74,8 @@ class UARM_interface():
         rospy.signal_shutdown("Shutdown function call")
         start_shutdown = time.time()
         while self.uarm_interface_thread.is_alive() or self.uarm_read_thread.is_alive():
-            #print "Shutdown interface queue"
             self.send_to_interface_queue("SHUTDOWN", priority=True)
-            #print "Shutdown read queue"
             self.send_to_read_queue("SHUTDOWN", priority=True)
-            #print "Thread status: ", self.uarm_interface_thread.is_alive(), self.uarm_read_thread.is_alive()
 
             if time.time()-start_shutdown > 5:
                 break
@@ -149,15 +148,23 @@ class UARM_interface():
         rospy.loginfo("uarm_interface shutdown")
         self.shutdown()
 
-    @ros_try_catch
+
     def request_detach(self):
         rospy.loginfo("uArm detach")
         self.send_to_interface_queue("DET")
 
-    @ros_try_catch
+
     def request_attach(self):
         rospy.loginfo("uArm attach")
         self.send_to_interface_queue("ATT")
+
+    def pump_on(self):
+        rospy.loginfo("uArm Pump On")
+        self.send_to_interface_queue("PUMP_ON")
+
+    def pump_off(self):
+        rospy.loginfo("uArm Pump Off")
+        self.send_to_interface_queue("PUMP_OFF")
 
     @ros_try_catch
     def get_analog(self, pin_num):
