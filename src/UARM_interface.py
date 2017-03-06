@@ -66,6 +66,7 @@ class UARM_interface():
             print "Connection error: ", e
 
     def shutdown(self):
+        rospy.loginfo("Shutdown function call")
         rospy.signal_shutdown("Shutdown function call")
         start_shutdown = time.time()
         while self.uarm_interface_thread.is_alive() or self.uarm_read_thread.is_alive():
