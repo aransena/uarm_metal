@@ -20,6 +20,3 @@ if __name__ == '__main__':
     while uarm_interface.alive and exit is False:
         time.sleep(1)
 
-    if uarm_interface.alive:
-        uarm_interface.shutdown()
-
