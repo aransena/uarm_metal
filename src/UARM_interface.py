@@ -136,6 +136,7 @@ class UARM_interface():
 
     def get_read_data(self):
         msg = []
+        print "here"
         if self.read_pos == 1:
             msg.append(self.read_position())
         elif self.read_ja == 1:
@@ -146,7 +147,7 @@ class UARM_interface():
 
         print msg
         return msg
-    
+
     def uarm_interface(self):
         rospy.loginfo("uarm_interface running")
         while True and (rospy.is_shutdown() is False):
