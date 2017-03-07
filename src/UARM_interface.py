@@ -126,6 +126,7 @@ class UARM_interface():
     def parameter_monitor(self):
         rospy.loginfo("Parameter monitor running.")
         while True and (rospy.is_shutdown() is False):
+            print self.read_pos, self.read_ja, self.read_AI
             self.read_pos = rospy.get_param('uarm_metal/read_position')
             self.read_ja = rospy.get_param('uarm_metal/read_joint_angles')
             self.read_AI = rospy.get_param('uarm_metal/read_AI')
