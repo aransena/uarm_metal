@@ -106,6 +106,10 @@ class UARM_interface():
         self.read_ja = self.get_setting("read_ja")
         self.read_AI = self.get_setting("read_AI",list=True)
 
+        rospy.set_param('uarm_metal/read_position',self.read_pos)
+        rospy.set_param('uarm_metal/read_joint_angles', self.read_ja)
+        rospy.set_param('uarm_metal/read_AI', self.read_AI)
+
         self.uarm_read_pub = rospy.Publisher('uarm_read', String, queue_size=10)
         rospy.Subscriber("uarm_write", String, self.uarm_write_callback)
         rospy.init_node('uarm_node', anonymous=True)
@@ -160,7 +164,7 @@ class UARM_interface():
                     print "Error: ", e
                     rospy.logerr("Error writing to queue. Queue probably shutdown.")
                     break
-                
+
                 # try:
                 #     self.ja = curr_vals[1]
                 # except Exception as e:
