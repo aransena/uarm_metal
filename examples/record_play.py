@@ -74,8 +74,16 @@ if __name__ == '__main__':
                 pub.publish("BEEP")
                 start = False
             if rec_data:
-                print rec_data.pop()
+                data = rec_data.pop()
+                print data
+                if len(data) == 3:
+                    msg = "POS" + str(data[0]) + "," + str(data[1]) + "," + str(data[2])
+                    pub.publish(msg)
+                elif len(data) == 4:
+                    msg = "JA" + str(data[0]) + "," + str(data[1]) + "," + str(data[2]) + "," + str(data[3])
+                    pub.publish(msg)
             else:
+                pub.publish("BEEP")
                 pub.publish("BEEP")
                 play = False
                 start = True
