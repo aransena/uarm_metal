@@ -49,6 +49,9 @@ if __name__ == '__main__':
     global robot_data
     global recording
     global play
+    global stop
+
+    stop = False
     reset = False
     robot_data = None
     play = False
