@@ -95,7 +95,7 @@ if __name__ == '__main__':
                 start = False
 
             if len(play_data) > 0:
-                data = map(float,play_data.pop(0).split(','))
+                data = map(lambda x: round(x,0),map(float,play_data.pop(0).split(',')))
                 print data, len(data), len(play_data)
                 if len(data) == 3:
                     msg = "POS" + str(data[0]) + "," + str(data[1]) + "," + str(data[2])
