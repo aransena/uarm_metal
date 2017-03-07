@@ -67,7 +67,7 @@ if __name__ == '__main__':
     rospy.Subscriber("/recorder", String, ctl_callback)
     rospy.init_node('record_play_node', anonymous=True)
 
-    rw_rate = 10.0
+    rw_rate = 30.0
     rec_data = []
     play_data = []
     start = True
@@ -85,9 +85,9 @@ if __name__ == '__main__':
                 pub.publish("ATT")
                 play_data = rec_data
                 start = False
-            if play_data:
+            if len(play_data) > 0:
                 data = map(float,play_data.pop().split(','))
-                print data, len(data)
+                print data, len(data), len(play_data)
                 if len(data) == 3:
                     msg = "POS" + str(data[0]) + "," + str(data[1]) + "," + str(data[2])
                     pub.publish(msg)
