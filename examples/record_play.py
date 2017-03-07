@@ -9,7 +9,7 @@ global active
 global play
 global robot_data
 global reset
-
+global stop
 
 
 def shutdown_signal_handler(signal, frame):
@@ -21,6 +21,7 @@ def ctl_callback(data):
     global recording
     global active
     global play
+    global stop
     global reset
     msg = data.data
     if msg == "RECORD":
@@ -28,6 +29,7 @@ def ctl_callback(data):
         play = False
     elif msg == "STOP":
         recording = False
+        stop = True
         play = False
     elif msg == "PLAY":
         recording = False
@@ -67,6 +69,10 @@ if __name__ == '__main__':
     start = True
     while exit is False:
         if recording:
+            if start:
+                pub.publish("DET")
+                pub.publish("BEEP")
+                start = False
             rec_data.append(robot_data)
 
         elif play:
@@ -75,18 +81,23 @@ if __name__ == '__main__':
                 start = False
             if rec_data:
                 data = rec_data.pop()
-                print data
+                print data, len(data)
                 if len(data) == 3:
                     msg = "POS" + str(data[0]) + "," + str(data[1]) + "," + str(data[2])
                     pub.publish(msg)
                 elif len(data) == 4:
                     msg = "JA" + str(data[0]) + "," + str(data[1]) + "," + str(data[2]) + "," + str(data[3])
                     pub.publish(msg)
+
             else:
                 pub.publish("BEEP")
                 pub.publish("BEEP")
                 play = False
                 start = True
+
+        elif stop:
+            pub.publish("BEEP")
+            start = True
 
         elif reset:
             rec_data = []
