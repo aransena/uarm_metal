@@ -20,20 +20,7 @@ if __name__ == '__main__':
     print 'Ctrl+C to exit'
     exit = False
 
-    pub = rospy.Publisher('/uarm_write', String, queue_size=10)
-
-    i = 0
-    write_rate = 30.0
     while uarm_interface.alive and exit is False:
-        if uarm_interface.ready:
-            if i == 0:
-                pub.publish("ATT")
-            msg = "JA"+str(i)
-            pub.publish(msg)
-            i += 4
-            if i > 45:
-                i = 1
-
-        time.sleep(1.0/write_rate)
+        time.sleep(1.0)
 
 # program exit

@@ -65,6 +65,7 @@ class UarmMetal():
             self.uarm = pyuarm.get_uarm()
             self.connected = True
             self.load_parameters()
+            self.connect_to_ROS()
             self.start_threads()
             rospy.loginfo("Connected")
             self.ready = True
@@ -106,6 +107,7 @@ class UarmMetal():
         rospy.set_param('uarm_metal/read_joint_angles', self.read_ja)
         rospy.set_param('uarm_metal/read_AI', self.read_AI)
 
+    def connect_to_ROS(self):
         self.uarm_read_pub = rospy.Publisher('uarm_read', String, queue_size=10)
         rospy.Subscriber("uarm_write", String, self.uarm_write_callback)
         rospy.init_node('uarm_node', anonymous=True)
@@ -261,45 +263,6 @@ class UarmMetal():
     @ros_try_catch
     def read_joint_angles(self):
         return self.get_joint_angles()
-
-
-
-    def playback(self):
-        if self.playback_data:
-            self.loading = False
-            self.iq.get_from_queue(all_msgs=True)  # flush queue
-            try:
-                joint_angles = self.ja
-                self.iq.send_to_queue("JA"+str(joint_angles[0]) + "," +
-                                      str(joint_angles[1]) + "," +
-                                      str(joint_angles[2]) +
-                                      str(joint_angles[3]))
-            except Exception as e:
-                err = str(e.message)
-                rospy.logerr("joint angles not ready yet: " + err)
-                rospy.signal_shutdown("joint angles not ready yet")
-
-            self.iq.send_to_queue("ATT")
-
-            self.iq.filter_queue("READ")
-
-            for line in self.playback_data:
-                if self.playback_active is False:
-                    self.iq.get_from_queue(all_msgs=True)
-                    break
-                msg = str(line)
-
-                self.iq.send_to_queue("READ")
-                self.iq.send_to_queue(msg)
-
-        self.iq.send_to_queue("BEEP")
-        self.iq.send_to_queue("DET")
-        self.playback_data = []
-
-    def load_playback_data(self, data_line):
-        self.loading = True
-        rospy.loginfo("Loading playback data...")
-        self.playback_data.append(data_line)
 
     @ros_try_catch
     def process_command(self, command):
