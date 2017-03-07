@@ -2,9 +2,10 @@
 import Queue
 import threading
 
-class ThreadSafePriorityQueue(Queue.PriorityQueue):
+class ThreadSafePriorityQueue():
 
     def __init__(self):
+        self.queue = Queue.PriorityQueue()
         self.get_lock = threading.Lock()
         self.put_lock = threading.Lock()
 
@@ -13,17 +14,17 @@ class ThreadSafePriorityQueue(Queue.PriorityQueue):
         with self.put_lock:
             if msg_list:
                 for m in msg_list:
-                    self.put((priority, m))
+                    self.queue.put((priority, m))
             else:
-                self.put((priority, msg))
+                self.queue.put((priority, msg))
 
     def get_from_queue(self, all_msgs=False, blocking=False):
         with self.get_lock:
             if all_msgs:
                 msgs = []
-                while self.qsize() > 0:
+                while self.queue.qsize() > 0:
                     try:
-                        msg = self.get(blocking)
+                        msg = self.queue.get(blocking)
                         try:
                             msg = msg[1]
                         except:
@@ -37,7 +38,7 @@ class ThreadSafePriorityQueue(Queue.PriorityQueue):
                 return msgs
             else:
                 try:
-                    msg = self.get(blocking)
+                    msg = self.queue.get(blocking)
                 except Queue.Empty:
                     msg = ""
                 try:
