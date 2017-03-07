@@ -28,6 +28,7 @@ class ThreadSafePriorityQueue:
             print self.name, " q_size: ", self.queue.qsize()
 
     def get_from_queue(self, all_msgs=False, blocking=False):
+        print "reading from ", self.name, ", size: ", self.queue.qsize()
         with self.get_lock:
             if all_msgs:
                 msgs = []
@@ -54,6 +55,7 @@ class ThreadSafePriorityQueue:
                     msg = msg[1]
                 except Exception as e:
                     pass
+                print self.name, " msg: ", msg
                 return msg
 
     def filter_queue(self, msg_filter, invert=False):
