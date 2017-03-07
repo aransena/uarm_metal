@@ -101,6 +101,7 @@ if __name__ == '__main__':
         elif stop:
             pub.publish("BEEP")
             start = True
+            stop = False
 
         elif reset:
             rec_data = []
