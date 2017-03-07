@@ -85,7 +85,6 @@ if __name__ == '__main__':
                 pub.publish("BEEP")
                 pub.publish("ATT")
                 play_data = rec_data[:]
-                print play_data
                 start = False
 
             if len(play_data) > 0:
