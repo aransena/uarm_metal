@@ -81,6 +81,7 @@ if __name__ == '__main__':
         elif play:
             if start:
                 pub.publish("BEEP")
+                pub.publish("ATT")
                 start = False
             if rec_data:
                 data = rec_data.pop()
@@ -93,6 +94,7 @@ if __name__ == '__main__':
                     pub.publish(msg)
 
             else:
+                pub.publish("DET")
                 pub.publish("BEEP")
                 pub.publish("BEEP")
                 play = False

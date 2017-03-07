@@ -303,7 +303,7 @@ class UarmMetal():
                 self.playback_thread.start()
         if command == "BEEP":
             self.uarm.set_buzzer(10000, 0.1)
-            self.rq.send_to_queue("DONE", priority=1)
+            #self.rq.send_to_queue("DONE", priority=1)
             self.playback_active = False
 
         if command == "STOP":
