@@ -2,7 +2,6 @@
 import signal
 import time
 import rospy
-from UarmMetal import UarmMetal
 from std_msgs.msg import String
 from uarm_decorators import *
 
@@ -55,9 +54,6 @@ if __name__ == '__main__':
     recording = False
     active = False
 
-    uarm_interface = UarmMetal()
-    uarm_interface.connect()
-
     signal.signal(signal.SIGINT, shutdown_signal_handler)
     print 'Ctrl+C to exit'
     exit = False
@@ -68,17 +64,16 @@ if __name__ == '__main__':
 
     rw_rate = 10.0
     rec_data = []
-    while uarm_interface.alive and exit is False:
-        if uarm_interface.ready:
-            if recording:
-                rec_data.append(robot_data)
+    while exit is False:
+        if recording:
+            rec_data.append(robot_data)
 
-            elif play:
-                if rec_data:
-                    print rec_data.pop()
+        elif play:
+            if rec_data:
+                print rec_data.pop()
 
-            elif reset:
-                rec_data = []
+        elif reset:
+            rec_data = []
 
         time.sleep(1.0 / rw_rate)
 
