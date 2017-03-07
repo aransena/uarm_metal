@@ -195,6 +195,7 @@ class UARM_interface():
             elif request == "SHUTDOWN":
                 break
             else:
+                print request
                 self.process_command(request)
                 if self.playback_active is False and self.loading is False:
                     self.send_to_interface_queue("READ")
@@ -250,6 +251,10 @@ class UARM_interface():
             else:
                 msg = str(robot_values)
                 msg = msg.translate(None, '[]')
+                if msg[0] is False:
+                    rospy.logerr("uArm read error")
+                    rospy.is_shutdown("uArm read error")
+                    break
                 try:
                     self.uarm_read_pub.publish(msg)
                 except Exception as e:
