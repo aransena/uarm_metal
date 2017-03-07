@@ -84,7 +84,7 @@ if __name__ == '__main__':
                 pub.publish("ATT")
                 start = False
             if rec_data:
-                data = rec_data.pop()
+                data = map(float,rec_data.pop().split(','))
                 print data, len(data)
                 if len(data) == 3:
                     msg = "POS" + str(data[0]) + "," + str(data[1]) + "," + str(data[2])
