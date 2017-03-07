@@ -28,6 +28,9 @@ class UARM_interface():
 
         self.ros_rate = None
         self.ros_hz = 0
+        self.read_pos = None
+        self.read_ja = None
+        self.read_AI = None
 
         self.settings = []
 
