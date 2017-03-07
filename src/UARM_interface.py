@@ -135,7 +135,7 @@ class UARM_interface():
             self.parameter_monitor_thread.daemon = True
             self.parameter_monitor_thread.start()
 
-            self.request_detach()
+            #self.request_detach()
 
         else:
             rospy.logerr("Startup error")
