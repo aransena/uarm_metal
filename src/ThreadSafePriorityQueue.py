@@ -19,7 +19,7 @@ class ThreadSafePriorityQueue:
 
     def send_to_queue(self, msg, msg_list=False, priority=10):
         with self.put_lock:
-            print "sending", msg, " to ", self.name, ", size: ", self.queue.qsize(), "id: ", self.queue
+            #print "sending", msg, " to ", self.name, ", size: ", self.queue.qsize(), "id: ", self.queue
             if msg_list:
                 for m in msg:
                     self.queue.put((priority, m))
@@ -53,18 +53,18 @@ class ThreadSafePriorityQueue:
             else:
                 try:
                     msg = self.queue.get(blocking)
-                    if self.name is not "read_queue":
-                        print self.name, " recv: ", msg
+                    # if self.name is not "read_queue":
+                    #     print self.name, " recv: ", msg
                 except Exception as e:#Queue.Empty:
-                    if self.name is not "read_queue":
-                        print self.name, " read error: ", e
+                    # if self.name is not "read_queue":
+                    #     print self.name, " read error: ", e
                     msg = ""
                     pass
                 try:
                     msg = msg[1]
                 except Exception as e:
-                    if self.name is not "read_queue":
-                        print self.name, " read error: ", e
+                    # if self.name is not "read_queue":
+                    #     print self.name, " read error: ", e
                     pass
                 #print self.name, " msg: ", msg
                 # if self.name is not "read_queue":
