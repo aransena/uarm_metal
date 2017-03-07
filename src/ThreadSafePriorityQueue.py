@@ -31,7 +31,9 @@ class ThreadSafePriorityQueue:
     def get_from_queue(self, all_msgs=False, blocking=False):
         with self.get_lock:
             if self.name is not "read_queue":
-                print "reading from ", self.name, ", size: ", self.queue.qsize(), "id: ", self.queue
+                print "reading from ", self.name, ", size: ", self.queue.qsize(), "id: ", self.queue, " all_msgs: ", \
+                    all_msgs, " blocking: ", blocking
+
             if all_msgs:
                 msgs = []
                 while self.queue.qsize() > 0:
