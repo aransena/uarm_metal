@@ -56,7 +56,7 @@ class ThreadSafePriorityQueue:
                     msg = msg[1]
                 except Exception as e:
                     pass
-                print self.name, " msg: ", msg
+                #print self.name, " msg: ", msg
                 return msg
 
     def filter_queue(self, msg_filter, invert=False):
