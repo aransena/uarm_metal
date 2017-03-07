@@ -18,15 +18,15 @@ class ThreadSafePriorityQueue:
         self.put_lock = threading.Lock()
 
     def send_to_queue(self, msg, msg_list=False, priority=10):
-        #print "sending", msg, " to ", self.name, ", size: ", self.queue.qsize(), "id: ", self.queue
         with self.put_lock:
+            print "sending", msg, " to ", self.name, ", size: ", self.queue.qsize(), "id: ", self.queue
             if msg_list:
                 for m in msg:
                     self.queue.put((priority, m))
             else:
                 self.queue.put((priority, msg))
 
-            print self.name, " q_size: ", self.queue.qsize()
+            #print self.name, " q_size: ", self.queue.qsize()
 
     def get_from_queue(self, all_msgs=False, blocking=False):
         #print "reading from ", self.name, ", size: ", self.queue.qsize(), "id: ", self.queue
