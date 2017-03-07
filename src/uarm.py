@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 import signal
 import time
+import rospy
 from UARM_interface import UARM_interface
+from std_msgs.msg import String
+
 
 def shutdown_signal_handler(signal, frame):
     global exit
@@ -17,7 +20,17 @@ if __name__ == '__main__':
     print 'Ctrl+C to exit'
     exit = False
 
+    pub = rospy.Publisher('/uarm_write', std_msgs.msg.String, queue_size=10)
+
+    i = 0
     while uarm_interface.alive and exit is False:
+        if uarm_interface.connected:
+            msg = "JA"+str(i)
+            pub.publish(msg)
+            i += 1
+            if i > 45:
+                i = 0
+
         time.sleep(1)
 
 # program exit

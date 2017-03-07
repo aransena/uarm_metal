@@ -58,10 +58,10 @@ class UARM_interface():
     def connect(self):
         try:
             self.uarm = pyuarm.get_uarm()
-            self.connected = True
             self.load_parameters()
             self.start_threads()
             rospy.loginfo("Connected")
+            self.connected = True
         except Exception as e:
             self.connected = False
             err = str(e.message)
