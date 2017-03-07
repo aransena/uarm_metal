@@ -23,7 +23,7 @@ if __name__ == '__main__':
     pub = rospy.Publisher('/uarm_write', String, queue_size=10)
 
     i = 0
-    write_rate = 10.0
+    write_rate = 20.0
     while uarm_interface.alive and exit is False:
         if uarm_interface.ready:
             if i == 0:
