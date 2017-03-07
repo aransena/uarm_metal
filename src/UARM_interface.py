@@ -176,7 +176,6 @@ class UARM_interface():
             elif request == "SHUTDOWN":
                 break
             else:
-                print "request: ", request
                 self.process_command(request)
                 if self.playback_active is False and self.loading is False:
                     self.iq.send_to_queue("READ")
@@ -246,7 +245,7 @@ class UARM_interface():
 
     def uarm_write_callback(self, data):
         if data.data == "CLEAR":
-                self.iq.get_from__queue(all_msgs=True)
+                self.iq.get_from_queue(all_msgs=True)
                 self.rq.get_from_queue(all_msgs=True)
 
         elif data.data[0] == "!":
