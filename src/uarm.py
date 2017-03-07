@@ -20,7 +20,7 @@ if __name__ == '__main__':
     print 'Ctrl+C to exit'
     exit = False
 
-    pub = rospy.Publisher('/uarm_write', std_msgs.msg.String, queue_size=10)
+    pub = rospy.Publisher('/uarm_write', String, queue_size=10)
 
     i = 0
     while uarm_interface.alive and exit is False:
