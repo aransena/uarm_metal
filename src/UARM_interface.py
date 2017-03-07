@@ -29,10 +29,10 @@ class UARM_interface():
 
         self.uarm_read_thread = None
         self.uarm_read_pub = None
-        self.rq = tspq.ThreadSafePriorityQueue()
+        self.rq = tspq.ThreadSafePriorityQueue("read_queue")
 
         self.uarm_interface_thread = None
-        self.iq = tspq.ThreadSafePriorityQueue()
+        self.iq = tspq.ThreadSafePriorityQueue("interface_queue")
 
         self.playback_thread = None
         self.playback_active = False

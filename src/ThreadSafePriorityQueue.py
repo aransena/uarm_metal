@@ -25,7 +25,7 @@ class ThreadSafePriorityQueue:
             else:
                 self.queue.put((priority, msg))
 
-            print "q_size", self.queue.qsize()
+            print self.name, " q_size: ", self.queue.qsize()
 
     def get_from_queue(self, all_msgs=False, blocking=False):
         with self.get_lock:
