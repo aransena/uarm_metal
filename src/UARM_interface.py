@@ -129,8 +129,9 @@ class UARM_interface():
             self.read_pos = rospy.get_param('uarm_metal/read_position')
             self.read_ja = rospy.get_param('uarm_metal/read_joint_angles')
             self.read_AI = rospy.get_param('uarm_metal/read_AI')
+            time.sleep(0.5)
 
-        rospy.loginfo("uarm_read shutdown")
+        rospy.loginfo("Parameter monitor shutdown")
 
     def start_threads(self):
         rospy.loginfo("Starting threads")
