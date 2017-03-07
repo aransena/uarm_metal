@@ -156,6 +156,7 @@ class UARM_interface():
         rospy.loginfo("uarm_interface running")
         while True and (rospy.is_shutdown() is False):
             request = self.iq.get_from_queue()
+
             if request == "READ":
                 curr_vals = self.get_read_data()
                 try:

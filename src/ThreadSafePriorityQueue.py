@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import Queue
 import threading
+from uarm_decorators import *
 
 
 class ThreadSafePriorityQueue:
@@ -17,6 +18,7 @@ class ThreadSafePriorityQueue:
         self.get_lock = threading.Lock()
         self.put_lock = threading.Lock()
 
+    @ros_try_catch
     def send_to_queue(self, msg, msg_list=False, priority=10):
         with self.put_lock:
             #print "sending", msg, " to ", self.name, ", size: ", self.queue.qsize(), "id: ", self.queue
@@ -28,6 +30,7 @@ class ThreadSafePriorityQueue:
 
             #print self.name, " q_size: ", self.queue.qsize()
 
+    @ros_try_catch
     def get_from_queue(self, all_msgs=False, blocking=False):
         with self.get_lock:
             # if self.name is not "read_queue":
@@ -71,6 +74,7 @@ class ThreadSafePriorityQueue:
                 #     print self.name, ", size: ", self.queue.qsize(), "recv: ", msg
                 return msg
 
+    @ros_try_catch
     def filter_queue(self, msg_filter, invert=False):
         msgs = self.get_from_queue(all_msgs=True, blocking=True)
         if msg_filter is not "":
