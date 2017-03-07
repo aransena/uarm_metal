@@ -109,7 +109,7 @@ class UarmMetal():
 
     def connect_to_ROS(self):
         self.uarm_read_pub = rospy.Publisher('uarm_read', String, queue_size=10)
-        rospy.Subscriber("uarm_write", String, self.uarm_write_callback)
+        rospy.Subscriber("uarm_write", String, self.uarm_write_callback, queue_size= 1000)
         rospy.init_node('uarm_node', anonymous=True)
         self.ros_rate = rospy.Rate(self.ros_hz)
 
@@ -294,11 +294,11 @@ class UarmMetal():
         if command[0:4] == "LOAD":
             self.load_playback_data(command[4:])
 
-        if command == "PLAY":
-            if self.playback_data:
-                self.playback_active = True
-                self.playback_thread = threading.Thread(target=self.playback)
-                self.playback_thread.daemon = True
+        # if command == "PLAY":
+        #     if self.playback_data:
+        #         self.playback_active = True
+        #         self.playback_thread = threading.Thread(target=self.playback)
+        #         self.playback_thread.daemon = True
 
                 self.playback_thread.start()
         if command == "BEEP":
