@@ -5,10 +5,13 @@ import threading
 class ThreadSafePriorityQueue():
 
     def __init__(self):
+        self.queue = None
+        self.get_lock = None
+        self.put_lock = None
+
         self.queue = Queue.PriorityQueue()
         self.get_lock = threading.Lock()
         self.put_lock = threading.Lock()
-
 
     def send_to_queue(self, msg, msg_list=False, priority=10):
         with self.put_lock:
