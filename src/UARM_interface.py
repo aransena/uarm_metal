@@ -220,29 +220,30 @@ class UARM_interface():
         rospy.loginfo("uarm_read running")
         while True and (rospy.is_shutdown() is False):
             robot_values = self.rq.get_from_queue(blocking=False)
-            print "robot vals none? ", robot_values==""
-            if robot_values == "SHUTDOWN":
-                rospy.logwarn("sending shutdown signal")
-                rospy.signal_shutdown("Normal Shutdown Procedure")
-                break
-            elif not robot_values:
-                pass
-            elif robot_values == "DONE":
-                self.uarm_read_pub.publish("DONE")
-            else:
-                msg = str(robot_values)
-                msg = msg.translate(None, '[]')
-                if msg[0] is False:
-                    rospy.logerr("uArm read error")
-                    rospy.is_shutdown("uArm read error")
+            print "ro vals ", (not robot_values)
+            if robot_values != "":
+                if robot_values == "SHUTDOWN":
+                    rospy.logwarn("sending shutdown signal")
+                    rospy.signal_shutdown("Normal Shutdown Procedure")
                     break
-                try:
-                    self.uarm_read_pub.publish(msg)
-                except Exception as e:
-                    err_msg = "Failed to publish data: ", e.message
-                    rospy.logerr(err_msg)
-                    rospy.signal_shutdown("Error Shutdown Procedure")
-                    break
+                elif not robot_values:
+                    pass
+                elif robot_values == "DONE":
+                    self.uarm_read_pub.publish("DONE")
+                else:
+                    msg = str(robot_values)
+                    msg = msg.translate(None, '[]')
+                    if msg[0] is False:
+                        rospy.logerr("uArm read error")
+                        rospy.is_shutdown("uArm read error")
+                        break
+                    try:
+                        self.uarm_read_pub.publish(msg)
+                    except Exception as e:
+                        err_msg = "Failed to publish data: ", e.message
+                        rospy.logerr(err_msg)
+                        rospy.signal_shutdown("Error Shutdown Procedure")
+                        break
 
         rospy.loginfo("uarm_read shutdown")
 
