@@ -10,7 +10,7 @@ from uarm_decorators import *
 from std_msgs.msg import String
 
 
-class UARM_interface():
+class UarmMetal():
 
     def __init__(self):
         self.uarm = None
@@ -41,6 +41,10 @@ class UARM_interface():
         self.loading = False
 
         self.ja = []
+
+#INIT Initialisation
+# Initialisation
+#endINIT
 
     def get_setting(self, name, string_val=False, list_type=False):
         for line in self.settings:
@@ -141,6 +145,10 @@ class UARM_interface():
             rospy.logerr("Startup error")
             rospy.signal_shutdown("Startup error")
 
+#MAIN Main Threads
+# Main threads/functions
+#endMAIN
+
     def get_read_data(self):
         msg = []
         if self.read_pos > 0:
@@ -166,13 +174,6 @@ class UARM_interface():
                     rospy.logerr("Error writing to queue. Queue probably shutdown.")
                     break
 
-                # try:
-                #     self.ja = curr_vals[1]
-                # except Exception as e:
-                #     err = str(e.message)
-                #     rospy.logerr("uArm not ready! " + err)
-                #     rospy.signal_shutdown("Error reading from uArm")
-
                 if self.playback_active is False and self.loading is False:
                     self.iq.send_to_queue("READ")
 
@@ -185,38 +186,6 @@ class UARM_interface():
 
         rospy.loginfo("uarm_interface shutdown")
         self.shutdown()
-
-    def request_detach(self):
-        rospy.loginfo("uArm detach")
-        self.iq.send_to_queue("DET")
-
-    def request_attach(self):
-        rospy.loginfo("uArm attach")
-        self.iq.send_to_queue("ATT")
-
-    def pump_on(self):
-        rospy.loginfo("uArm Pump On")
-        self.iq.send_to_queue("PUMP_ON")
-
-    def pump_off(self):
-        rospy.loginfo("uArm Pump Off")
-        self.iq.send_to_queue("PUMP_OFF")
-
-    @ros_try_catch
-    def read_analog(self, pin_num):
-        return round(self.uarm.get_analog(pin_num), 3)
-
-    @ros_try_catch
-    def get_joint_angles(self):
-        return self.uarm.get_servo_angle()
-
-    @ros_try_catch
-    def read_position(self):
-        return self.uarm.get_position()
-
-    @ros_try_catch
-    def read_joint_angles(self):
-        return self.get_joint_angles()
 
     def uarm_read(self):
         rospy.loginfo("uarm_read running")
@@ -257,6 +226,44 @@ class UARM_interface():
                 self.iq.send_to_queue(msg, priority=1)
         else:
                 self.iq.send_to_queue(data.data)
+
+#ACTIONS Action request for uArm
+# Actions
+#endACTIONS
+
+    def request_detach(self):
+        rospy.loginfo("uArm detach")
+        self.iq.send_to_queue("DET")
+
+    def request_attach(self):
+        rospy.loginfo("uArm attach")
+        self.iq.send_to_queue("ATT")
+
+    def pump_on(self):
+        rospy.loginfo("uArm Pump On")
+        self.iq.send_to_queue("PUMP_ON")
+
+    def pump_off(self):
+        rospy.loginfo("uArm Pump Off")
+        self.iq.send_to_queue("PUMP_OFF")
+
+    @ros_try_catch
+    def read_analog(self, pin_num):
+        return round(self.uarm.get_analog(pin_num), 3)
+
+    @ros_try_catch
+    def get_joint_angles(self):
+        return self.uarm.get_servo_angle()
+
+    @ros_try_catch
+    def read_position(self):
+        return self.uarm.get_position()
+
+    @ros_try_catch
+    def read_joint_angles(self):
+        return self.get_joint_angles()
+
+
 
     def playback(self):
         if self.playback_data:

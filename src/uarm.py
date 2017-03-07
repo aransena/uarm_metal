@@ -2,7 +2,7 @@
 import signal
 import time
 import rospy
-from UARM_interface import UARM_interface
+from UarmMetal import UarmMetal
 from std_msgs.msg import String
 
 
@@ -13,7 +13,7 @@ def shutdown_signal_handler(signal, frame):
 
 if __name__ == '__main__':
     global exit
-    uarm_interface = UARM_interface()
+    uarm_interface = UarmMetal()
     uarm_interface.connect()
 
     signal.signal(signal.SIGINT, shutdown_signal_handler)
