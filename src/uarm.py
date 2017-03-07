@@ -25,7 +25,7 @@ if __name__ == '__main__':
     i = 0
     while uarm_interface.alive and exit is False:
         if uarm_interface.ready:
-            msg = "JA"+str(i)
+            msg = "JA"+str(i)+","
             pub.publish(msg)
             i += 1
             if i > 45:
