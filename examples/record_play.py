@@ -74,7 +74,7 @@ if __name__ == '__main__':
     rospy.Subscriber("/recorder", String, ctl_callback)
     rospy.init_node('record_play_node', anonymous=True)
 
-    rw_rate = 30.0
+    rw_rate = 5.0
     rec_data = []
     play_data = []
     start = True
