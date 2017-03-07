@@ -2,25 +2,30 @@
 import Queue
 import threading
 
-class ThreadSafePriorityQueue():
 
-    def __init__(self):
+class ThreadSafePriorityQueue:
+
+    def __init__(self, name):
+
+        self.name = None
         self.queue = None
         self.get_lock = None
         self.put_lock = None
 
+        self.name = name
         self.queue = Queue.PriorityQueue()
         self.get_lock = threading.Lock()
         self.put_lock = threading.Lock()
 
     def send_to_queue(self, msg, msg_list=False, priority=10):
-        print "Send: ", msg, msg_list, priority, self.queue
         with self.put_lock:
             if msg_list:
-                for m in msg_list:
+                for m in msg:
                     self.queue.put((priority, m))
             else:
                 self.queue.put((priority, msg))
+
+            print "q_size", self.queue.qsize()
 
     def get_from_queue(self, all_msgs=False, blocking=False):
         with self.get_lock:
@@ -31,7 +36,7 @@ class ThreadSafePriorityQueue():
                         msg = self.queue.get(blocking)
                         try:
                             msg = msg[1]
-                        except:
+                        except Exception as e:
                             pass
                         print msg
                         msgs.append(msg)
@@ -47,7 +52,7 @@ class ThreadSafePriorityQueue():
                     msg = ""
                 try:
                     msg = msg[1]
-                except:
+                except Exception as e:
                     pass
                 return msg
 
@@ -64,4 +69,3 @@ class ThreadSafePriorityQueue():
                     n += 1
             if msgs is not []:
                 self.send_to_queue(msgs, msg_list=True, priority=1)
-
