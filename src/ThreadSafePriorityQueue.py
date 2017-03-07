@@ -67,6 +67,8 @@ class ThreadSafePriorityQueue:
                         print self.name, " read error: ", e
                     pass
                 #print self.name, " msg: ", msg
+                if self.name is not "read_queue":
+                    print self.name, ", size: ", self.queue.qsize(), "recv: ", msg
                 return msg
 
     def filter_queue(self, msg_filter, invert=False):
