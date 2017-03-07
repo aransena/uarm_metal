@@ -64,13 +64,20 @@ if __name__ == '__main__':
 
     rw_rate = 10.0
     rec_data = []
+    start = True
     while exit is False:
         if recording:
             rec_data.append(robot_data)
 
         elif play:
+            if start:
+                pub.publish("BEEP")
             if rec_data:
                 print rec_data.pop()
+            else:
+                pub.publish("BEEP")
+                play = False
+                start = False
 
         elif reset:
             rec_data = []
