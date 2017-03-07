@@ -42,6 +42,13 @@ def ctl_callback(data):
 def data_callback(data):
     global robot_data
     robot_data = data.data
+    global start
+    if recording:
+        if start:
+            pub.publish("DET")
+            pub.publish("BEEP")
+            start = False
+        rec_data.append(robot_data)
 
 
 if __name__ == '__main__':
@@ -72,14 +79,14 @@ if __name__ == '__main__':
     play_data = []
     start = True
     while exit is False:
-        if recording:
-            if start:
-                pub.publish("DET")
-                pub.publish("BEEP")
-                start = False
-            rec_data.append(robot_data)
+        # if recording:
+        #     if start:
+        #         pub.publish("DET")
+        #         pub.publish("BEEP")
+        #         start = False
+        #     rec_data.append(robot_data)
 
-        elif play:
+        if play:
             if start:
                 print "Start playback"
                 pub.publish("BEEP")
