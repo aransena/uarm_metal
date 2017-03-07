@@ -53,6 +53,8 @@ class ThreadSafePriorityQueue:
             else:
                 try:
                     msg = self.queue.get(blocking)
+                    if self.name is not "read_queue":
+                        print self.name, " recv: ", msg
                 except Exception as e:#Queue.Empty:
                     if self.name is not "read_queue":
                         print self.name, " read error: ", e
