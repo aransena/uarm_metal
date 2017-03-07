@@ -1,4 +1,4 @@
 ros_hz, 1000.0,
 read_pos,0,
-read_ja,1,
-read_AI,1,7,8,
+read_ja,0,
+read_AI,0,7,8,
