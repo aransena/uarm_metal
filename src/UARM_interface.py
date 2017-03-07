@@ -176,7 +176,7 @@ class UARM_interface():
             elif request == "SHUTDOWN":
                 break
             else:
-                print request
+                print "request: ", request
                 self.process_command(request)
                 if self.playback_active is False and self.loading is False:
                     self.iq.send_to_queue("READ")
