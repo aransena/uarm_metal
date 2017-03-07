@@ -60,6 +60,7 @@ if __name__ == '__main__':
     pub = rospy.Publisher('/uarm_write', String, queue_size=10)
     rospy.Subscriber("/uarm_read", String, data_callback)
     rospy.Subscriber("/recorder", String, ctl_callback)
+    rospy.init_node('record_play_node', anonymous=True)
 
     rw_rate = 10.0
     rec_data = []
