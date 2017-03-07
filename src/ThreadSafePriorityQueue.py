@@ -53,11 +53,14 @@ class ThreadSafePriorityQueue:
             else:
                 try:
                     msg = self.queue.get(blocking)
-                except Queue.Empty:
+                except Exception as e:#Queue.Empty:
+                    print self.name, " read error: ", e
                     msg = ""
+                    pass
                 try:
                     msg = msg[1]
                 except Exception as e:
+                    print self.name, " read error: ", e
                     pass
                 #print self.name, " msg: ", msg
                 return msg
