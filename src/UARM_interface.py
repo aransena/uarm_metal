@@ -179,7 +179,6 @@ class UARM_interface():
                 print "request: ", request
                 self.process_command(request)
                 if self.playback_active is False and self.loading is False:
-                    time.sleep(1)
                     self.iq.send_to_queue("READ")
 
         rospy.loginfo("uarm_interface shutdown")
@@ -222,7 +221,6 @@ class UARM_interface():
         while True and (rospy.is_shutdown() is False):
             robot_values = self.rq.get_from_queue(blocking=False)
             print "robot vals: ", robot_values
-            time.sleep(1)
             if robot_values == "SHUTDOWN":
                 rospy.logwarn("sending shutdown signal")
                 rospy.signal_shutdown("Normal Shutdown Procedure")
