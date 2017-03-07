@@ -455,7 +455,7 @@ class UARM_interface():
         if command == "DET":
             self.uarm.set_servo_detach()
 
-        if command[0:3] == "POS" and self.playback_active:
+        if command[0:3] == "POS":# and self.playback_active:
             position = map(float, command[3:].split(','))
             self.uarm.set_position(position[0], position[1], position[2])
 
@@ -464,7 +464,7 @@ class UARM_interface():
             # print adjust
             self.uarm.set_position(x=0, y=0, z=adjust, speed=0, relative=True)
 
-        if command[0:2] == "JA" and self.playback_active:
+        if command[0:2] == "JA":# and self.playback_active:
             angle = map(float, command[2:].split(','))
             for i in range(0, len(angle)-1):
                 self.uarm.set_servo_angle(i, angle[i])
