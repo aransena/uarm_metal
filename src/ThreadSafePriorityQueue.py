@@ -14,7 +14,7 @@ class ThreadSafePriorityQueue():
         self.put_lock = threading.Lock()
 
     def send_to_queue(self, msg, msg_list=False, priority=10):
-        print "Send: ", msg
+        print "Send: ", msg, msg_list, priority, self.queue
         with self.put_lock:
             if msg_list:
                 for m in msg_list:
