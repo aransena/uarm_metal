@@ -143,11 +143,11 @@ class UARM_interface():
 
     def get_read_data(self):
         msg = []
-        if self.read_pos == 1:
+        if rospy.get_param('uarm_metal/read_position') > 0:
             msg.append(self.read_position())
-        if self.read_ja == 1:
+        if rospy.get_param('uarm_metal/read_joint_angles') > 0:
             msg.append(self.read_joint_angles())
-        if self.read_AI[0] == 1:
+        if rospy.get_param('uarm_metal/read_AI')[0] > 0:
             for i in self.read_AI[1:]:
                 msg.append(self.read_analog(i))
         return msg
