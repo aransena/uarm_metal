@@ -157,7 +157,7 @@ class UARM_interface():
             if request == "READ":
                 curr_vals = self.get_read_data()
                 try:
-                    self.iq.send_to_queue(curr_vals)
+                    self.rq.send_to_queue(curr_vals)
                 except Exception as e:
                     print "Error: ", e
                     rospy.logerr("Error writing to queue. Queue probably shutdown.")
