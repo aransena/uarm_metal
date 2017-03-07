@@ -318,7 +318,7 @@ class UARM_interface():
 
         if command[0:2] == "JA":  # and self.playback_active:
             angle = map(float, command[2:].split(','))
-            for i in range(0, len(angle)-1):
+            for i in range(0, len(angle)):
                 self.uarm.set_servo_angle(i, angle[i])
 
         if command[0:4] == "LOAD":
