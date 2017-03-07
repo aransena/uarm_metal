@@ -180,6 +180,7 @@ class UARM_interface():
                 self.process_command(request)
                 if self.playback_active is False and self.loading is False:
                     print "send READ"
+                    time.sleep(1)
                     self.iq.send_to_queue("READ")
 
         rospy.loginfo("uarm_interface shutdown")
