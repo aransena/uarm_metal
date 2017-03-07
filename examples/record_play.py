@@ -110,7 +110,7 @@ if __name__ == '__main__':
             stop = False
 
         elif reset:
-            rec_data = []
+            #rec_data = []
             reset = False
 
         time.sleep(1.0 / rw_rate)
