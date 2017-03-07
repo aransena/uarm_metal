@@ -123,7 +123,7 @@ class UARM_interface():
 
         rospy.loginfo("Done loading parameters.")
 
-    def param_monitor(self):
+    def parameter_monitor(self):
         rospy.loginfo("Parameter monitor running.")
         while True and (rospy.is_shutdown() is False):
             self.read_pos = rospy.get_param('uarm_metal/read_position')
@@ -138,7 +138,7 @@ class UARM_interface():
         if self.connected is True:
             self.uarm_read_thread = threading.Thread(target=self.uarm_read)
             self.uarm_interface_thread = threading.Thread(target=self.uarm_interface)
-            self.parameter_monitor_thread = threading.Thread(target=self.uarm_interface)
+            self.parameter_monitor_thread = threading.Thread(target=self.parameter_monitor)
 
             self.uarm_read_thread.daemon = True
             self.uarm_read_thread.start()
@@ -248,7 +248,14 @@ class UARM_interface():
             else:
                 msg = str(robot_values)
                 msg = msg.translate(None, '[]')
-                self.uarm_read_pub.publish(msg)
+                try:
+                    self.uarm_read_pub.publish(msg)
+                except Exception as e:
+                    err_msg = "Failed to publish data: ", e.message
+                    rospy.logerr(err_msg)
+                    rospy.signal_shutdown("Error Shutdown Procedure")
+                    break
+
                 #self.ros_rate.sleep()
 
         rospy.loginfo("uarm_read shutdown")
