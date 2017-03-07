@@ -3,7 +3,6 @@ import signal
 import time
 import rospy
 from std_msgs.msg import String
-from uarm_decorators import *
 
 global recording
 global active
