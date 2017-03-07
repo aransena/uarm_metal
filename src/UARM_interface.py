@@ -169,9 +169,8 @@ class UARM_interface():
                 #     err = str(e.message)
                 #     rospy.logerr("uArm not ready! " + err)
                 #     rospy.signal_shutdown("Error reading from uArm")
-                print "here"
+
                 if self.playback_active is False and self.loading is False:
-                    print "there"
                     self.iq.send_to_queue("READ")
 
             elif request == "SHUTDOWN":
