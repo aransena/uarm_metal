@@ -84,11 +84,11 @@ if __name__ == '__main__':
                 print "Start playback"
                 pub.publish("BEEP")
                 pub.publish("ATT")
-                play_data = rec_data.reverse()
+                play_data = rec_data
                 start = False
 
             if len(play_data) > 0:
-                data = map(float,play_data.pop().split(','))
+                data = map(float,play_data.pop(0).split(','))
                 print data, len(data), len(play_data)
                 if len(data) == 3:
                     msg = "POS" + str(data[0]) + "," + str(data[1]) + "," + str(data[2])
