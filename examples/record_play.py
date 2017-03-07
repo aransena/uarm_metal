@@ -72,12 +72,13 @@ if __name__ == '__main__':
         elif play:
             if start:
                 pub.publish("BEEP")
+                start = False
             if rec_data:
                 print rec_data.pop()
             else:
                 pub.publish("BEEP")
                 play = False
-                start = False
+                start = True
 
         elif reset:
             rec_data = []
