@@ -123,17 +123,30 @@ class UARM_interface():
 
         rospy.loginfo("Done loading parameters.")
 
+    def param_monitor(self):
+        rospy.loginfo("Parameter monitor running.")
+        while True and (rospy.is_shutdown() is False):
+            self.read_pos = rospy.get_param('uarm_metal/read_position')
+            self.read_ja = rospy.get_param('uarm_metal/read_joint_angles')
+            self.read_AI = rospy.get_param('uarm_metal/read_AI')
+
+        rospy.loginfo("uarm_read shutdown")
+
     def start_threads(self):
         rospy.loginfo("Starting threads")
         if self.connected is True:
             self.uarm_read_thread = threading.Thread(target=self.uarm_read)
             self.uarm_interface_thread = threading.Thread(target=self.uarm_interface)
+            self.parameter_monitor_thread = threading.Thread(target=self.uarm_interface)
 
             self.uarm_read_thread.daemon = True
             self.uarm_read_thread.start()
 
             self.uarm_interface_thread.daemon = True
             self.uarm_interface_thread.start()
+
+            self.parameter_monitor_thread.daemon = True
+            self.parameter_monitor_thread.start()
 
             self.request_detach()
 
@@ -143,11 +156,11 @@ class UARM_interface():
 
     def get_read_data(self):
         msg = []
-        if rospy.get_param('uarm_metal/read_position') > 0:
+        if  self.read_pos > 0:
             msg.append(self.read_position())
-        if rospy.get_param('uarm_metal/read_joint_angles') > 0:
+        if self.read_ja > 0:
             msg.append(self.read_joint_angles())
-        if rospy.get_param('uarm_metal/read_AI')[0] > 0:
+        if self.read_AI[0] > 0:
             for i in self.read_AI[1:]:
                 msg.append(self.read_analog(i))
         return msg
