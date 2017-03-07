@@ -69,6 +69,7 @@ if __name__ == '__main__':
 
     rw_rate = 10.0
     rec_data = []
+    play_data = []
     start = True
     while exit is False:
         if recording:
@@ -84,7 +85,7 @@ if __name__ == '__main__':
                 pub.publish("ATT")
                 play_data = rec_data
                 start = False
-            if rec_data:
+            if play_data:
                 data = map(float,play_data.pop().split(','))
                 print data, len(data)
                 if len(data) == 3:
