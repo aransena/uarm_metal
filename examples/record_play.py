@@ -84,7 +84,7 @@ if __name__ == '__main__':
                 print "Start playback"
                 pub.publish("BEEP")
                 pub.publish("ATT")
-                play_data = rec_data
+                play_data = rec_data[:]
                 print play_data
                 start = False
 
