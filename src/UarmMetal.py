@@ -216,7 +216,6 @@ class UarmMetal():
         rospy.loginfo("uarm_read shutdown")
 
     def uarm_write_callback(self, data):
-        print data
         if data.data == "CLEAR":
                 self.iq.get_from_queue(all_msgs=True)
                 self.rq.get_from_queue(all_msgs=True)
