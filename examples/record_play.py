@@ -82,9 +82,10 @@ if __name__ == '__main__':
             if start:
                 pub.publish("BEEP")
                 pub.publish("ATT")
+                play_data = rec_data
                 start = False
             if rec_data:
-                data = map(float,rec_data.pop().split(','))
+                data = map(float,play_data.pop().split(','))
                 print data, len(data)
                 if len(data) == 3:
                     msg = "POS" + str(data[0]) + "," + str(data[1]) + "," + str(data[2])
