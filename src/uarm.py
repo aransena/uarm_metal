@@ -23,14 +23,17 @@ if __name__ == '__main__':
     pub = rospy.Publisher('/uarm_write', String, queue_size=10)
 
     i = 0
+    write_rate = 10
     while uarm_interface.alive and exit is False:
         if uarm_interface.ready:
+            if i == 0:
+                pub.publish("ATT")
             msg = "JA"+str(i)
             pub.publish(msg)
-            i += 1
+            i += 4
             if i > 45:
-                i = 0
+                i = 1
 
-        time.sleep(1)
+        time.sleep(1/write_rate)
 
 # program exit
