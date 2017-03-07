@@ -81,10 +81,12 @@ if __name__ == '__main__':
 
         elif play:
             if start:
+                print "Start playback"
                 pub.publish("BEEP")
                 pub.publish("ATT")
-                play_data = rec_data
+                play_data = rec_data.reverse()
                 start = False
+
             if len(play_data) > 0:
                 data = map(float,play_data.pop().split(','))
                 print data, len(data), len(play_data)
@@ -94,7 +96,6 @@ if __name__ == '__main__':
                 elif len(data) == 4:
                     msg = "JA" + str(data[0]) + "," + str(data[1]) + "," + str(data[2]) + "," + str(data[3])
                     pub.publish(msg)
-
             else:
                 pub.publish("DET")
                 pub.publish("BEEP")
@@ -109,6 +110,7 @@ if __name__ == '__main__':
 
         elif reset:
             rec_data = []
+            reset = False
 
         time.sleep(1.0 / rw_rate)
 
