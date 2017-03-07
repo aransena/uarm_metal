@@ -220,14 +220,11 @@ class UARM_interface():
         rospy.loginfo("uarm_read running")
         while True and (rospy.is_shutdown() is False):
             robot_values = self.rq.get_from_queue(blocking=False)
-            print "ro vals ", bool(robot_values)
-            if robot_values != "":
+            if robot_values:
                 if robot_values == "SHUTDOWN":
                     rospy.logwarn("sending shutdown signal")
                     rospy.signal_shutdown("Normal Shutdown Procedure")
                     break
-                elif not robot_values:
-                    pass
                 elif robot_values == "DONE":
                     self.uarm_read_pub.publish("DONE")
                 else:
