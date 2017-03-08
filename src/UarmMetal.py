@@ -276,7 +276,12 @@ class UarmMetal():
         self.request_ja(data)
 
     def pump_write_callback(self, data):
-        print data.data
+        if data.data:
+            rospy.loginfo("Pump On")
+            self.pump_on()
+        else:
+            rospy.loginfo("Pump Off")
+            self.pump_off()
 
     def attach_write_callback(self, data):
         rospy.loginfo("Attach")
