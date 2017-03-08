@@ -165,13 +165,13 @@ class UarmMetal():
     def get_read_data(self):
         msg = []
         if self.read_pos > 0:
-            msg.append(list(self.read_position()[:]))
+            msg.append(list(self.read_position()))
         if self.read_ja > 0:
-            msg.append(list(self.read_joint_angles()[:]))
+            msg.append(list(self.read_joint_angles()))
         if self.read_AI[0] > 0:
             reading = []
             for i in self.read_AI[1:]:
-                reading.append(self.read_analog(i)[:])
+                reading.append(self.read_analog(i))
             msg.append(list(reading[:]))
         return msg
 
@@ -226,11 +226,11 @@ class UarmMetal():
                     try:
                         self.string_read_pub.publish(msg)
                         if self.read_pos > 0:
-                            self.pos_pub.publish(msg)
+                            self.pos_pub.publish(str(robot_values[self.read_pos]).translate(None,'[]'))
                         if self.read_ja > 0:
-                            self.ja_pub.publish(msg)
+                            self.ja_pub.publish(str(robot_values[self.read_pos+self.read_ja]).translate(None, '[]'))
                         if self.read_AI[0] > 0:
-                            self.ai_pub.publish(msg)
+                            self.ai_pub.publish(str(robot_values[self.read_pos + self.read_ja + self.read_AI[0]]).translate(None, '[]'))
 
                     except Exception as e:
                         err_msg = "Failed to publish data: ", e.message
