@@ -232,6 +232,7 @@ class UarmMetal():
                         if self.read_ja > 0:
                             try:
                                 ja_data = robot_values[self.read_pos]
+                                print type(ja_data), ja_data
                             #print ja_data
                             #ja_msg = map(float,str(ja_data).translate(None, '[]'))
                                 self.ja_pub.publish(len(ja_data),ja_data)
