@@ -9,31 +9,63 @@ import getch # pip install https://pypi.python.org/packages/source/g/getch/getch
 from std_msgs.msg import String, Bool
 from uarm_metal.msg import JointAngles, Beep
 
+
+global record
+global play
+global stop
+global reset
+
 def shutdown_signal_handler(signal, frame):
     global exit
     exit = True
     print 'Shutting Down!'
 
 def data_callback(data):
-    #print data
-    pass
+    global rec_data
+    rec_data.append(data)
+
 
 def process(key):
+    global record
+    global play
+    global stop
+    global reset
+    global rec_data
+
     print key
     if key == '1':
-        pass
+        record = True
+
     elif key == '2':
-        pass
+        stop = True
+        play = False
+        record = False
+
     elif key == '3':
-        pass
+        play = True
+
     elif key == '4':
-        pass
+        reset = True
+        rec_data = []
+
     elif key == 'q':
         global exit
         exit = True
         print 'Shutting Down!'
 
 if __name__ == '__main__':
+    global record
+    global play
+    global stop
+    global reset
+    global rec_data
+
+    record = False
+    play = False
+    stop = False
+    reset = False
+    rec_data = []
+
     signal.signal(signal.SIGINT, shutdown_signal_handler)
     print 'Ctrl+C or q to exit'
     exit = False
@@ -57,5 +89,19 @@ if __name__ == '__main__':
 
         key = getch.getch()
         process(key)
+
+        if play:
+            if start:
+                play_data = rec_data[:]
+                start = False
+            try:
+                ja_pub.publish(play_data.pop(0))
+            except:
+                play = False
+                start = True
+
+        else:
+            start = True
+
         time.sleep(1.0 / rw_rate)
 
