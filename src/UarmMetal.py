@@ -204,7 +204,7 @@ class UarmMetal():
                     msg = str(robot_values)
                     msg = msg.translate(None, '[]')
                     try:
-                        print "val: ", msg == False, type(msg), str(msg)==False, len(msg)
+                        print "val: ", msg == False, type(msg), str(msg)=="False", len(msg)
                     except:
                         pass
                     if msg[0] is False:
