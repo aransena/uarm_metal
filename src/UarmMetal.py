@@ -225,13 +225,11 @@ class UarmMetal():
                         self.string_read_pub.publish(msg)
                         if self.read_pos > 0:
                             pos_msg = map(float,str(robot_values[0]).translate(None,'[]').split(','))
-                            print pos_msg
-                            self.pos_pub.publish(pos_msg)
+                            self.pos_pub.publish(len(pos_msg),pos_msg)
                         if self.read_ja > 0:
                             ja_msg = map(float,str(robot_values[self.read_pos +
                                                                  self.read_ja - 1]).translate(None, '[]'))
-                            print ja_msg
-                            self.ja_pub.publish(ja_msg)
+                            self.ja_pub.publish(len(ja_msg),ja_msg)
                         if self.read_AI[0] > 0:
                             self.ai_pub.publish(str(robot_values[self.read_pos +
                                                                  self.read_ja +
