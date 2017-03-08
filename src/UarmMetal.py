@@ -214,7 +214,6 @@ class UarmMetal():
                 elif robot_values == "DONE":
                     self.string_read_pub.publish("DONE")
                 else:
-                    print robot_values
                     msg = str(robot_values)
                     msg = msg.translate(None, '[]')
 
@@ -226,11 +225,14 @@ class UarmMetal():
                     try:
                         self.string_read_pub.publish(msg)
                         if self.read_pos > 0:
-                            self.pos_pub.publish(str(robot_values[self.read_pos]).translate(None,'[]'))
+                            self.pos_pub.publish(str(robot_values[0]).translate(None,'[]'))
                         if self.read_ja > 0:
-                            self.ja_pub.publish(str(robot_values[self.read_pos+self.read_ja]).translate(None, '[]'))
+                            self.ja_pub.publish(str(robot_values[self.read_pos +
+                                                                 self.read_ja - 1]).translate(None, '[]'))
                         if self.read_AI[0] > 0:
-                            self.ai_pub.publish(str(robot_values[self.read_pos + self.read_ja + self.read_AI[0]]).translate(None, '[]'))
+                            self.ai_pub.publish(str(robot_values[self.read_pos +
+                                                                 self.read_ja +
+                                                                 self.read_AI[0] - 1]).translate(None, '[]'))
 
                     except Exception as e:
                         err_msg = "Failed to publish data: ", e.message
