@@ -11,7 +11,7 @@ from std_msgs.msg import String, Bool
 from std_msgs.msg import Float32MultiArray as Array
 from std_msgs.msg import MultiArrayDimension as ArrayDims
 
-from msg import Position, JointAngles
+from uarm_metal.msg import Position, JointAngles
 
 
 class UarmMetal():
