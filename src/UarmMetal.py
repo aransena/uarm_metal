@@ -165,12 +165,12 @@ class UarmMetal():
     def get_read_data(self):
         msg = []
         if self.read_pos > 0:
-            msg.append(self.read_position())
+            msg.append(self.read_position()[:])
         if self.read_ja > 0:
-            msg.append(self.read_joint_angles())
+            msg.append(self.read_joint_angles()[:])
         if self.read_AI[0] > 0:
             for i in self.read_AI[1:]:
-                msg.append(self.read_analog(i))
+                msg.append(self.read_analog(i)[:])
         return msg
 
     def uarm_interface(self):
@@ -215,7 +215,7 @@ class UarmMetal():
                     msg = str(robot_values)
                     msg = msg.translate(None, '[]')
 
-                    if str(msg) == "False":
+                    if str(msg)[0:5] == "False":
                         rospy.logerr("uArm read error")
                         rospy.signal_shutdown("uArm read error")
                         self.uarm.disconnect()
