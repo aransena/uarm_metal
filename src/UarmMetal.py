@@ -208,6 +208,8 @@ class UarmMetal():
                     except:
                         pass
                     if str(msg) == "False":
+                        print "###########################################"
+                        time.sleep(10)
                         rospy.logerr("uArm read error")
                         rospy.is_shutdown("uArm read error")
                         self.uarm.disconnect()
