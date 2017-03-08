@@ -41,18 +41,14 @@ def process(key):
     elif key == '2':
         print "STOP"
         stop = True
-        play = False
-        record = False
+
 
     elif key == '3':
         print "PLAY"
-        record = False
         play = True
 
     elif key == '4':
         print "RESET"
-        play = False
-        record = False
         reset = True
         rec_data = []
 
