@@ -9,6 +9,7 @@ from uarm_decorators import *
 
 from std_msgs.msg import String, Bool
 from std_msgs.msg import Float32MultiArray as Array
+from std_msgs.msg import MultiArrayDimension as ArrayDims
 
 
 class UarmMetal():
@@ -224,20 +225,24 @@ class UarmMetal():
                     try:
                         self.string_read_pub.publish(msg)
                         if self.read_pos > 0:
+                            dims = ArrayDims()
+                            dims.size = len(robot_values[0])
+                            pos_data = Array()
+                            pos_data.data = robot_values[0]
+                            pos_data.layout.dim.append(dims)
 
-                            pos_data = robot_values[0]
-                            print type(pos_data), type(pos_data[0]), len(pos_data)
+                            #print type(pos_data), type(pos_data[0]), len(pos_data)
                             #pos_msg = map(float,str(robot_values[0]).translate(None,'[]').split(','))
-                            self.pos_pub.publish([len(pos_data)],pos_data)
+                            self.pos_pub.publish(pos_data)
                         if self.read_ja > 0:
-                            try:
-                                ja_data = robot_values[self.read_pos]
-                                print type(ja_data), type(ja_data[0]), len(ja_data)
-                            #print ja_data
+                            dims = ArrayDims()
+                            dims.size = len(robot_values[self.read_pos])
+                            ja_data = Array()
+                            ja_data.data = robot_values[self.read_pos]
+                            ja_data.layout.dim.append(dims)
                             #ja_msg = map(float,str(ja_data).translate(None, '[]'))
-                                self.ja_pub.publish([len(ja_data)],ja_data)
-                            except Exception as e:
-                                print e
+                            self.ja_pub.publish(ja_data)
+
                         if self.read_AI[0] > 0:
                             self.ai_pub.publish(str(robot_values[self.read_pos +
                                                                  self.read_ja]).translate(None, '[]'))
