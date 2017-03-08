@@ -103,10 +103,10 @@ if __name__ == '__main__':
         process(key)
 
         if record:
-            att_pub.publish(False)
+            #att_pub.publish(False)
             beep_pub.publish(bp)
 
-        if play:
+        elif play:
             if start:
                 play_data = rec_data[:]
                 att_pub.publish(True)
