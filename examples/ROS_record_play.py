@@ -113,8 +113,10 @@ if __name__ == '__main__':
 
         if record:
             #att_pub.publish(False)
-            att_pub.publish(False)
-            beep_pub.publish(bp)
+            if start:
+                att_pub.publish(False)
+                beep_pub.publish(bp)
+                start = False
 
         elif play:
             if start:
