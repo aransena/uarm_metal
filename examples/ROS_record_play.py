@@ -38,19 +38,30 @@ def process(key):
     if key == '1':
         print "RECORD"
         record = True
+        stop = False
+        play = False
+        reset = False
 
     elif key == '2':
         print "STOP"
         stop = True
-
+        record = False
+        play = False
+        reset = False
 
     elif key == '3':
         print "PLAY"
         play = True
+        stop = False
+        record = False
+        reset = False
 
     elif key == '4':
         print "RESET"
         reset = True
+        stop = True
+        record = False
+        play = False
         rec_data = []
 
     elif key == 'q':
