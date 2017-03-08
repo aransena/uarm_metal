@@ -293,11 +293,15 @@ class UarmMetal():
 
     @ros_try_catch
     def read_position(self):
-        return self.uarm.get_position()
+        position = []
+        position = self.uarm.get_position()
+        return position
 
     @ros_try_catch
     def read_joint_angles(self):
-        return self.get_joint_angles()
+        angles = []
+        angles = self.get_joint_angles()
+        return angles
 
     @ros_try_catch
     def process_command(self, command):
