@@ -225,6 +225,7 @@ class UarmMetal():
                         if self.read_pos > 0:
                             self.pos_pub.publish(msg)
                         if self.read_ja > 0:
+                            print msg
                             self.ja_pub.publish(msg)
                         if self.read_AI[0] > 0:
                             self.ai_pub.publish(msg)
