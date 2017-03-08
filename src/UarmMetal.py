@@ -204,7 +204,7 @@ class UarmMetal():
                     msg = str(robot_values)
                     msg = msg.translate(None, '[]')
                     try:
-                        print "val: ", msg
+                        print "val: ", msg == False
                     except:
                         pass
                     if msg[0] is False:
@@ -218,7 +218,7 @@ class UarmMetal():
                         rospy.logerr(err_msg)
                         rospy.signal_shutdown("Error Shutdown Procedure")
                         break
-        time.sleep(1/self.ros_hz)
+        time.sleep(1.0/self.ros_hz)
         rospy.loginfo("uarm_read shutdown")
 
     def uarm_write_callback(self, data):
@@ -285,6 +285,10 @@ class UarmMetal():
         if command[0:3] == "POS":  # and self.playback_active:
             position = map(float, command[3:].split(','))
             self.uarm.set_position(position[0], position[1], position[2])
+
+        if command[0:2] == "WR":
+            angle = float(command[2:])
+            self.uarm.set_servo_angle(3,angle)
 
         if command[0:3] == "REL":
             adjust = float(command[3:])
