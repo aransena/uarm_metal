@@ -224,6 +224,7 @@ class UarmMetal():
                     try:
                         self.string_read_pub.publish(msg)
                         if self.read_pos > 0:
+                            print robot_values
                             pos_data = robot_values[0]
                             #pos_msg = map(float,str(robot_values[0]).translate(None,'[]').split(','))
                             self.pos_pub.publish(len(pos_data),pos_data)
