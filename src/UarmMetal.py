@@ -193,10 +193,6 @@ class UarmMetal():
         rospy.loginfo("uarm_read running")
         while True and (rospy.is_shutdown() is False):
             robot_values = self.rq.get_from_queue(blocking=False)
-            try:
-                print "val: ", robot_values[0]==False
-            except:
-                pass
             if robot_values:
                 if robot_values == "SHUTDOWN":
                     rospy.logwarn("sending shutdown signal")
@@ -207,6 +203,10 @@ class UarmMetal():
                 else:
                     msg = str(robot_values)
                     msg = msg.translate(None, '[]')
+                    try:
+                        print "val: ", msg
+                    except:
+                        pass
                     if msg[0] is False:
                         rospy.logerr("uArm read error")
                         rospy.is_shutdown("uArm read error")
@@ -218,7 +218,7 @@ class UarmMetal():
                         rospy.logerr(err_msg)
                         rospy.signal_shutdown("Error Shutdown Procedure")
                         break
-
+        time.sleep(1/self.ros_hz)
         rospy.loginfo("uarm_read shutdown")
 
     def uarm_write_callback(self, data):
