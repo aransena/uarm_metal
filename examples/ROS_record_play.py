@@ -30,6 +30,10 @@ if __name__ == '__main__':
     signal.signal(signal.SIGINT, shutdown_signal_handler)
     print 'Ctrl+C to exit'
     exit = False
+    rospy.set_param('/uarm_metal/read_joint_angles', 1)
+    rospy.set_param('/uarm_metal/read_position', 0)
+    rospy.set_param('/uarm_metal/read_digital_inputs', "[0,0]")
+    rospy.set_param('/uarm_metal/read_analog_inputs', "[0,0]")
 
     ja_pub = rospy.Publisher('/uarm_metal/joint_angles_write', JointAngles, queue_size=10)
     att_put = rospy.Publisher('/uarm_metal/attach', Bool, queue_size=10)

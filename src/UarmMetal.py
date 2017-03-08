@@ -108,8 +108,8 @@ class UarmMetal():
         self.ros_hz = self.get_setting("ros_hz")
         self.read_pos = self.get_setting("read_pos")
         self.read_ja = self.get_setting("read_ja")
-        self.read_AI = self.get_setting("read_AI", list_type=True)
-        self.read_DI = self.get_setting("read_DI", list_type=True)
+        self.read_AI = self.get_setting("read_analog_inputs", list_type=True)
+        self.read_DI = self.get_setting("read_digital_inputs", list_type=True)
 
         rospy.set_param('uarm_metal/read_position', self.read_pos)
         rospy.set_param('uarm_metal/read_joint_angles', self.read_ja)
