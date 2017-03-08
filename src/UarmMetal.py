@@ -131,7 +131,7 @@ class UarmMetal():
         while True and (rospy.is_shutdown() is False):
             self.read_pos = int(rospy.get_param('uarm_metal/read_position'))
             self.read_ja = int(rospy.get_param('uarm_metal/read_joint_angles'))
-            self.read_AI = int(rospy.get_param('uarm_metal/read_AI'))
+            self.read_AI = map(int, rospy.get_param('uarm_metal/read_AI'))
             time.sleep(0.5)
 
         rospy.loginfo("Parameter monitor shutdown")
