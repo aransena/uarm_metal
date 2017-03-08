@@ -257,7 +257,6 @@ class UarmMetal():
                         if self.read_AI[0] > 0:
                             ai_data = robot_values[self.read_pos + self.read_ja]
                             ai_msg = str(ai_data).translate(None,'[]')
-                            print ai_msg
                             self.ai_pub.publish(ai_msg)
 
                         if self.read_DI[0] > 0:
