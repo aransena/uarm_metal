@@ -236,6 +236,7 @@ class UarmMetal():
                         break
                     try:
                         self.string_read_pub.publish(msg)
+                        print robot_values
                         if self.read_pos > 0:
                             pos_msg = Position()
                             pos_data = robot_values[0]
