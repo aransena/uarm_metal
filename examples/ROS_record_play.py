@@ -22,6 +22,7 @@ def shutdown_signal_handler(signal, frame):
 
 def data_callback(data):
     global rec_data
+    global record
     if record:
         #print data
         rec_data.append(data)
