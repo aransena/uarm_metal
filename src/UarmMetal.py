@@ -193,7 +193,10 @@ class UarmMetal():
         rospy.loginfo("uarm_read running")
         while True and (rospy.is_shutdown() is False):
             robot_values = self.rq.get_from_queue(blocking=False)
-            print "val: ", robot_values[0]==False
+            try:
+                print "val: ", robot_values[0]==False
+            except:
+                pass
             if robot_values:
                 if robot_values == "SHUTDOWN":
                     rospy.logwarn("sending shutdown signal")
