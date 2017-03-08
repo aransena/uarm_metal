@@ -214,6 +214,7 @@ class UarmMetal():
                 elif robot_values == "DONE":
                     self.string_read_pub.publish("DONE")
                 else:
+                    print robot_values
                     msg = str(robot_values)
                     msg = msg.translate(None, '[]')
 
