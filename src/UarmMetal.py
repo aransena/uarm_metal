@@ -364,7 +364,7 @@ class UarmMetal():
                 info = map(float,command[4].split(','))
                 freq = info[0]
                 dur = info[1]
-            except Eception as e:
+            except Exception as e:
                 print e
                 freq = 10000
                 dur = 0.1
