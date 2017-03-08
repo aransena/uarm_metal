@@ -128,5 +128,5 @@ if __name__ == '__main__':
             start = True
             stop = False
 
-        time.sleep(1.0 / rw_rate)
+        #time.sleep(1.0 / rw_rate)
 
