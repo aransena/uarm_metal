@@ -2,6 +2,10 @@
 import signal
 import time
 import rospy
+
+# http://stackoverflow.com/questions/36714728/pip-install-getch-clang-error
+import getch # pip install https://pypi.python.org/packages/source/g/getch/getch-1.0-python2.tar.gz#md5=586ea0f1f16aa094ff6a30736ba03c50
+
 from std_msgs.msg import String, Bool
 from uarm_metal.msg import JointAngles, Beep
 
@@ -48,7 +52,7 @@ if __name__ == '__main__':
     start = True
     while exit is False:
 
-        key = getch()
+        key = getch.getch()
         process(key)
         time.sleep(1.0 / rw_rate)
 
