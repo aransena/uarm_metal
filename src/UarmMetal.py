@@ -263,7 +263,6 @@ class UarmMetal():
                         if self.read_DI[0] > 0:
                             di_data = robot_values[self.read_pos + self.read_ja + self.read_AI[0]]
                             di_msg = str(di_data).translate(None,'[]')
-                            print di_msg
                             self.di_pub.publish(di_msg)
 
                     except Exception as e:
