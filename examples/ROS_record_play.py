@@ -114,12 +114,14 @@ if __name__ == '__main__':
         if record:
             #att_pub.publish(False)
             if start:
+                print "record"
                 att_pub.publish(False)
                 beep_pub.publish(bp)
                 start = False
 
-        elif play:
+        elif "play":
             if start:
+                print play
                 play_data = rec_data[:]
                 att_pub.publish(True)
                 beep_pub.publish(bp)
@@ -133,6 +135,7 @@ if __name__ == '__main__':
                 play = False
 
         elif stop:
+            print "stop"
             att_pub.publish(False)
             beep_pub.publish(bp)
             start = True
