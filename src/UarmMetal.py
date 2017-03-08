@@ -210,6 +210,7 @@ class UarmMetal():
                     if str(msg) == "False":
                         rospy.logerr("uArm read error")
                         rospy.is_shutdown("uArm read error")
+                        self.uarm.disconnect()
                         break
                     try:
                         self.uarm_read_pub.publish(msg)
