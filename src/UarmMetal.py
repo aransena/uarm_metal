@@ -265,13 +265,13 @@ class UarmMetal():
                 self.iq.send_to_queue(data.data)
 
     def position_write_callback(self, data):
-        print data.data
+        print data
         # if data.data[0]:
         #     msg = data.data[1:]
         #     self.iq.send_to_queue(msg)
 
     def ja_write_callback(self, data):
-        print data.data
+        print data
 
     def pump_write_callback(self, data):
         print data.data
