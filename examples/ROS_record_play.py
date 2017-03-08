@@ -112,7 +112,8 @@ if __name__ == '__main__':
             if start:
                 play_data = rec_data[:]
                 att_pub.publish(True)
-                time.sleep(0.1)
+                beep_pub.publish(bp)
+                time.sleep(0.5)
                 start = False
             try:
                 ja_pub.publish(play_data.pop(0))
