@@ -52,7 +52,7 @@ if __name__ == '__main__':
     start = True
     while exit is False:
 
-        key = getch()
+        key = getch.getch()
         process(key)
         time.sleep(1.0 / rw_rate)
 
