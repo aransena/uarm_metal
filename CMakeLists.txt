@@ -19,6 +19,7 @@ add_message_files(
    FILES
    Position.msg
    JointAngles.msg
+   Beep.msg
 )
 
 generate_messages(
