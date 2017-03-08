@@ -364,7 +364,8 @@ class UarmMetal():
                 info = map(float,command[4].split(','))
                 freq = info[0]
                 dur = info[1]
-            except:
+            except Eception as e:
+                print e
                 freq = 10000
                 dur = 0.1
             self.uarm.set_buzzer(freq, dur)
