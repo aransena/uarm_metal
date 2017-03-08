@@ -122,7 +122,9 @@ if __name__ == '__main__':
                 start = True
                 beep_pub.publish(bp)
 
-        else:
+        elif stop:
+            att_pub.publish(False)
+            beep_pub.publish(bp)
             start = True
 
 
