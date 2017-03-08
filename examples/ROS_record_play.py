@@ -22,7 +22,8 @@ def shutdown_signal_handler(signal, frame):
 
 def data_callback(data):
     global rec_data
-    rec_data.append(data)
+    if record:
+        rec_data.append(data)
 
 
 def process(key):
@@ -101,6 +102,10 @@ if __name__ == '__main__':
         key = getch.getch()
         process(key)
 
+        if record:
+            att_pub.publish(False)
+            beep_pub.publish(bp)
+
         if play:
             if start:
                 play_data = rec_data[:]
@@ -113,9 +118,6 @@ if __name__ == '__main__':
                 play = False
                 start = True
                 beep_pub.publish(bp)
-
-        elif record:
-            att_pub.publish(False)
 
         else:
             start = True
