@@ -24,6 +24,7 @@ class UarmMetal():
         self.read_pos = None
         self.read_ja = None
         self.read_AI = None
+        self.read_DI = None
 
         self.settings = []
 
@@ -108,7 +109,7 @@ class UarmMetal():
         self.read_pos = self.get_setting("read_pos")
         self.read_ja = self.get_setting("read_ja")
         self.read_AI = self.get_setting("read_AI", list_type=True)
-        self.read_AI = self.get_setting("read_DI", list_type=True)
+        self.read_DI = self.get_setting("read_DI", list_type=True)
 
         rospy.set_param('uarm_metal/read_position', self.read_pos)
         rospy.set_param('uarm_metal/read_joint_angles', self.read_ja)
