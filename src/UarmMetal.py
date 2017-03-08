@@ -122,6 +122,7 @@ class UarmMetal():
         rospy.Subscriber("uarm_metal/position_write", Position, self.position_write_callback, queue_size=1000)
         rospy.Subscriber("uarm_metal/joint_angles_write", JointAngles, self.ja_write_callback, queue_size=1000)
         rospy.Subscriber("uarm_metal/pump", Bool, self.pump_write_callback, queue_size=1000)
+        rospy.Subscriber("uarm_metal/beep", Beep, self.beep_write_callback, queue_size=1000)
         rospy.init_node('uarm_node', anonymous=True)
         self.ros_rate = rospy.Rate(self.ros_hz)
 
@@ -275,6 +276,10 @@ class UarmMetal():
 
     def pump_write_callback(self, data):
         print data.data
+
+    def beep_write_callback(self, data):
+        print data
+        self.request_beep(data)
         # if data.data[0]:
         #     msg = data.data[1:]
         #     self.iq.send_to_queue(msg)
@@ -282,6 +287,10 @@ class UarmMetal():
 #ACTIONS Action request for uArm
 # Actions
 #endACTIONS
+    def request_beep(self, data):
+        rospy.loginfo("Beep")
+        msg = "BEEP" + str(data.frequency) + "," + str(data.duration)
+        self.iq.send_to_queue(msg)
 
     def request_detach(self):
         rospy.loginfo("uArm detach")
@@ -350,8 +359,15 @@ class UarmMetal():
             for i in range(0, len(angle)):
                 self.uarm.set_servo_angle(i, angle[i])
 
-        if command == "BEEP":
-            self.uarm.set_buzzer(10000, 0.1)
+        if command[0:4] == "BEEP":
+            try:
+                info = map(float,command[4].split(','))
+                freq = info[0]
+                dur = info[1]
+            except:
+                freq = 10000
+                dur = 0.1
+            self.uarm.set_buzzer(freq, dur)
             self.playback_active = False
 
         if command == "STOP":
