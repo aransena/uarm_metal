@@ -126,7 +126,7 @@ if __name__ == '__main__':
             att_pub.publish(False)
             beep_pub.publish(bp)
             start = True
-
+            stop = False
 
         time.sleep(1.0 / rw_rate)
 
