@@ -120,9 +120,9 @@ if __name__ == '__main__':
                 beep_pub.publish(bp)
                 start = False
 
-        elif "play":
+        elif play:
             if start:
-                print play
+                print "play"
                 play_data = rec_data[:]
                 att_pub.publish(True)
                 beep_pub.publish(bp)
