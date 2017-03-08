@@ -104,6 +104,7 @@ if __name__ == '__main__':
 
         if record:
             #att_pub.publish(False)
+            att_pub.publish(False)
             beep_pub.publish(bp)
 
         elif play:
@@ -122,7 +123,7 @@ if __name__ == '__main__':
 
         else:
             start = True
-            att_pub.publish(False)
+
 
         time.sleep(1.0 / rw_rate)
 
