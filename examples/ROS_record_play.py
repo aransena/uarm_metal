@@ -75,7 +75,7 @@ if __name__ == '__main__':
     rospy.set_param('/uarm_metal/read_analog_inputs', [0,0])
 
     ja_pub = rospy.Publisher('/uarm_metal/joint_angles_write', JointAngles, queue_size=10)
-    att_put = rospy.Publisher('/uarm_metal/attach', Bool, queue_size=10)
+    att_pub = rospy.Publisher('/uarm_metal/attach', Bool, queue_size=10)
     beep_pub = rospy.Publisher('/uarm_metal/beep', Beep, queue_size=10)
 
     rospy.Subscriber("/uarm_metal/joint_angles_read", JointAngles, data_callback)
@@ -85,6 +85,11 @@ if __name__ == '__main__':
     rec_data = []
     play_data = []
     start = True
+
+    bp = Beep()
+    bp.frequency = 12000
+    bp.duration = 0.1
+
     while exit is False:
 
         key = getch.getch()
@@ -93,15 +98,22 @@ if __name__ == '__main__':
         if play:
             if start:
                 play_data = rec_data[:]
+                att_pub.publish(True)
+                time.sleep(0.1)
                 start = False
             try:
                 ja_pub.publish(play_data.pop(0))
             except:
                 play = False
                 start = True
+                beep_pub.publish(bp)
+
+        elif record:
+            att_pub.publish(False)
 
         else:
             start = True
+            att_pub.publish(False)
 
         time.sleep(1.0 / rw_rate)
 
