@@ -267,7 +267,7 @@ class UarmMetal():
                 self.iq.send_to_queue(data.data)
 
     def position_write_callback(self, data):
-        print data
+        self.request_position(data)
         # if data.data[0]:
         #     msg = data.data[1:]
         #     self.iq.send_to_queue(msg)
@@ -297,6 +297,14 @@ class UarmMetal():
 #ACTIONS Action request for uArm
 # Actions
 #endACTIONS
+    def request_position(self, data):
+        msg = "POS" + str(data.x) + "," + str(data.y) + "," + str(data.z)
+        self.iq.send_to_queue(msg)
+
+    def request_ja(self, data):
+        msg = "JA" + str(data.j0) + "," + str(data.j1) + "," + str(data.j2) + "," + str(data.j3)
+        self.iq.send_to_queue(msg)
+
     def request_beep(self, data):
         rospy.loginfo("Beep")
         msg = "BEEP" + str(data.frequency) + "," + str(data.duration)
