@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(uarm)
+project(uarm_metal)
 
 find_package(catkin REQUIRED COMPONENTS
   message_generation
