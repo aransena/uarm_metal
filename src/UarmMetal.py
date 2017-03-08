@@ -39,6 +39,7 @@ class UarmMetal():
         self.pos_pub = None
         self.ja_pub = None
         self.ai_pub = None
+        self.di_pub = None
 
         self.playback_thread = None
         self.playback_active = False
@@ -107,16 +108,19 @@ class UarmMetal():
         self.read_pos = self.get_setting("read_pos")
         self.read_ja = self.get_setting("read_ja")
         self.read_AI = self.get_setting("read_AI", list_type=True)
+        self.read_AI = self.get_setting("read_DI", list_type=True)
 
         rospy.set_param('uarm_metal/read_position', self.read_pos)
         rospy.set_param('uarm_metal/read_joint_angles', self.read_ja)
-        rospy.set_param('uarm_metal/read_AI', self.read_AI)
+        rospy.set_param('uarm_metal/read_analog_inputs', self.read_AI)
+        rospy.set_param('uarm_metal/read_digital_inputs', self.read_DI)
 
     def connect_to_ROS(self):
         self.string_read_pub = rospy.Publisher('uarm_metal/string_read', String, queue_size=10)
         self.pos_pub = rospy.Publisher('uarm_metal/position_read', Position, queue_size=10)
         self.ja_pub = rospy.Publisher('uarm_metal/joint_angles_read', JointAngles, queue_size=10)
         self.ai_pub = rospy.Publisher('uarm_metal/analog_inputs_read', String, queue_size=10)
+        self.di_pub = rospy.Publisher('uarm_metal/digital_inputs_read', String, queue_size=10)
 
         rospy.Subscriber("uarm_metal/string_write", String, self.string_write_callback, queue_size= 1000)
         rospy.Subscriber("uarm_metal/position_write", Position, self.position_write_callback, queue_size=1000)
@@ -134,7 +138,8 @@ class UarmMetal():
         while True and (rospy.is_shutdown() is False):
             self.read_pos = int(rospy.get_param('uarm_metal/read_position'))
             self.read_ja = int(rospy.get_param('uarm_metal/read_joint_angles'))
-            self.read_AI = map(int, rospy.get_param('uarm_metal/read_AI'))
+            self.read_AI = map(int, rospy.get_param('uarm_metal/read_analog_inputs'))
+            self.read_DI = map(int, rospy.get_param('uarm_metal/read_digital_inputs'))
             time.sleep(0.5)
 
         rospy.loginfo("Parameter monitor shutdown")
@@ -172,10 +177,15 @@ class UarmMetal():
         if self.read_ja > 0:
             msg.append(self.read_joint_angles())
         if self.read_AI[0] > 0:
-            reading = []
+            analog_vals = []
             for i in self.read_AI[1:]:
-                reading.append(self.read_analog(i))
-            msg.append(reading[:])
+                analog_vals.append(self.read_analog(i))
+            msg.append(analog_vals[:])
+        if self.read_DI[0] > 0:
+            digital_vals = []
+            for i in self.read_DI[1:]:
+                digital_vals.append(self.read_digital(i))
+            msg.append(digital_vals[:])
         return msg
 
     def uarm_interface(self):
@@ -248,6 +258,12 @@ class UarmMetal():
                             ai_msg = str(ai_data).translate(None,'[]')
                             print ai_msg
                             self.ai_pub.publish(ai_msg)
+
+                        if self.read_DI[0] > 0:
+                            di_data = robot_values[self.read_pos + self.read_ja + self.read_AI]
+                            di_msg = str(di_data).translate(None,'[]')
+                            print di_msg
+                            self.di_pub.publish(di_msg)
 
                     except Exception as e:
                         err_msg = "Failed to publish data: ", e.message
@@ -333,9 +349,14 @@ class UarmMetal():
         rospy.loginfo("uArm Pump Off")
         self.iq.send_to_queue("PUMP_OFF")
 
+# GETS
     @ros_try_catch
     def read_analog(self, pin_num):
         return round(self.uarm.get_analog(pin_num), 3)
+
+    @ros_try_catch
+    def read_digital(self, pin_num):
+        return self.uarm.get_digital(pin_num)
 
     @ros_try_catch
     def get_joint_angles(self):
@@ -353,6 +374,7 @@ class UarmMetal():
         angles = self.get_joint_angles()
         return angles
 
+# SETS
     @ros_try_catch
     def process_command(self, command):
         if command == "PUMP_ON":
