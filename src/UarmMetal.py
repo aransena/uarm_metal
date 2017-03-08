@@ -122,6 +122,7 @@ class UarmMetal():
         rospy.Subscriber("uarm_metal/position_write", Position, self.position_write_callback, queue_size=1000)
         rospy.Subscriber("uarm_metal/joint_angles_write", JointAngles, self.ja_write_callback, queue_size=1000)
         rospy.Subscriber("uarm_metal/pump", Bool, self.pump_write_callback, queue_size=1000)
+        rospy.Subscriber("uarm_metal/attach", Bool, self.attach_write_callback, queue_size=1000)
         rospy.Subscriber("uarm_metal/beep", Beep, self.beep_write_callback, queue_size=1000)
         rospy.init_node('uarm_node', anonymous=True)
         self.ros_rate = rospy.Rate(self.ros_hz)
@@ -277,6 +278,12 @@ class UarmMetal():
     def pump_write_callback(self, data):
         print data.data
 
+    def attach_write_callback(self, data):
+        if data.data:
+            self.request_attach()
+        else:
+            self.request_detach()
+
     def beep_write_callback(self, data):
         print data
         self.request_beep(data)
@@ -365,7 +372,6 @@ class UarmMetal():
                 freq = info[0]
                 dur = info[1]
             except Exception as e:
-                print e
                 freq = 10000
                 dur = 0.1
             self.uarm.set_buzzer(freq, dur)
