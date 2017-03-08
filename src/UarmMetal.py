@@ -227,13 +227,11 @@ class UarmMetal():
                             pos_msg = map(float,str(robot_values[0]).translate(None,'[]').split(','))
                             self.pos_pub.publish(len(pos_msg),pos_msg)
                         if self.read_ja > 0:
-                            ja_msg = map(float,str(robot_values[self.read_pos +
-                                                                 self.read_ja - 1]).translate(None, '[]'))
+                            ja_msg = map(float,str(robot_values[self.read_pos]).translate(None, '[]'))
                             self.ja_pub.publish(len(ja_msg),ja_msg)
                         if self.read_AI[0] > 0:
                             self.ai_pub.publish(str(robot_values[self.read_pos +
-                                                                 self.read_ja +
-                                                                 self.read_AI[0] - 1]).translate(None, '[]'))
+                                                                 self.read_ja]).translate(None, '[]'))
 
                     except Exception as e:
                         err_msg = "Failed to publish data: ", e.message
