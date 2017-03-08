@@ -193,6 +193,7 @@ class UarmMetal():
         rospy.loginfo("uarm_read running")
         while True and (rospy.is_shutdown() is False):
             robot_values = self.rq.get_from_queue(blocking=False)
+            print "val: ", robot_values[0]==False
             if robot_values:
                 if robot_values == "SHUTDOWN":
                     rospy.logwarn("sending shutdown signal")
@@ -291,26 +292,23 @@ class UarmMetal():
             for i in range(0, len(angle)):
                 self.uarm.set_servo_angle(i, angle[i])
 
-        if command[0:4] == "LOAD":
-            self.load_playback_data(command[4:])
-
-        # if command == "PLAY":
-        #     if self.playback_data:
-        #         self.playback_active = True
-        #         self.playback_thread = threading.Thread(target=self.playback)
-        #         self.playback_thread.daemon = True
-
-                # self.playback_thread.start()
-
-
         if command == "BEEP":
             self.uarm.set_buzzer(10000, 0.1)
-            #self.rq.send_to_queue("DONE", priority=1)
             self.playback_active = False
 
         if command == "STOP":
-            self.playback_active = False
             self.iq.filter_queue(msg_filter="READ")
             time.sleep(0.5)
             self.iq.filter_queue(msg_filter="JA")
-            self.playback_data = []
+
+
+            # if command[0:4] == "LOAD":
+            #     self.load_playback_data(command[4:])
+
+            # if command == "PLAY":
+            #     if self.playback_data:
+            #         self.playback_active = True
+            #         self.playback_thread = threading.Thread(target=self.playback)
+            #         self.playback_thread.daemon = True
+
+            # self.playback_thread.start()
