@@ -203,7 +203,7 @@ class UarmMetal():
                 else:
                     msg = str(robot_values)
                     msg = msg.translate(None, '[]')
-                    if str(msg) is "False":
+                    if str(msg) == "False":
                         rospy.logerr("uArm read error")
                         rospy.is_shutdown("uArm read error")
                         break
