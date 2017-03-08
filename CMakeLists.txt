@@ -14,6 +14,13 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
+
+add_message_files(
+   FILES
+   Position.msg
+   JointAngles.msg
+)
+
 generate_messages(
    DEPENDENCIES
    std_msgs
@@ -22,10 +29,3 @@ generate_messages(
 catkin_package(
    CATKIN_DEPENDS message_runtime
 )
-
-add_message_files(
-   FILES
-   Position.msg
-   JointAngles.msg
-)
-
