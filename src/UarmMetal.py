@@ -8,9 +8,6 @@ import ThreadSafePriorityQueue as tspq
 from uarm_decorators import *
 
 from std_msgs.msg import String, Bool
-from std_msgs.msg import Float32MultiArray as Array
-from std_msgs.msg import MultiArrayDimension as ArrayDims
-
 from uarm_metal.msg import Position, JointAngles
 
 
@@ -227,26 +224,14 @@ class UarmMetal():
                     try:
                         self.string_read_pub.publish(msg)
                         if self.read_pos > 0:
-                            # dims = ArrayDims()
-                            # dims.size = len(robot_values[0])
-                            # pos_data = Array()
-                            # pos_data.layout.dim.append(dims)
-                            # print type(pos_data), type(pos_data[0]), len(pos_data)
-                            # pos_msg = map(float,str(robot_values[0]).translate(None,'[]').split(','))
                             pos_msg = Position()
                             pos_data = robot_values[0]
                             pos_msg.x = pos_data[0]
                             pos_msg.y = pos_data[1]
                             pos_msg.z = pos_data[2]
-                            self.pos_pub.publish(pos_data)
+                            self.pos_pub.publish(pos_msg)
 
                         if self.read_ja > 0:
-                            # dims = ArrayDims()
-                            # dims.size = len(robot_values[self.read_pos])
-                            # ja_data = Array()
-                            # ja_data.data = robot_values[self.read_pos]
-                            # ja_data.layout.dim.append(dims)
-                            #ja_msg = map(float,str(ja_data).translate(None, '[]'))
                             ja_msg = JointAngles()
                             ja_data = robot_values[self.read_pos]
                             ja_msg.j0 = ja_data[0]
