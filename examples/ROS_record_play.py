@@ -98,6 +98,7 @@ if __name__ == '__main__':
     rospy.init_node('record_play_node', anonymous=True)
 
     rw_rate = 1000.0
+    rate = rospy.Rate(100)
     rec_data = []
     play_data = []
     start = True
@@ -141,6 +142,6 @@ if __name__ == '__main__':
             start = True
             stop = False
 
-
+        rate.sleep()
         #time.sleep(1.0 / rw_rate)
 
