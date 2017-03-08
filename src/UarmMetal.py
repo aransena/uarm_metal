@@ -165,12 +165,14 @@ class UarmMetal():
     def get_read_data(self):
         msg = []
         if self.read_pos > 0:
-            msg.append(self.read_position()[:])
+            msg.append(list(self.read_position()[:]))
         if self.read_ja > 0:
-            msg.append(self.read_joint_angles()[:])
+            msg.append(list(self.read_joint_angles()[:]))
         if self.read_AI[0] > 0:
+            reading = []
             for i in self.read_AI[1:]:
-                msg.append(self.read_analog(i)[:])
+                reading.append(self.read_analog(i)[:])
+            msg.append(list(reading[:]))
         return msg
 
     def uarm_interface(self):
@@ -225,7 +227,6 @@ class UarmMetal():
                         if self.read_pos > 0:
                             self.pos_pub.publish(msg)
                         if self.read_ja > 0:
-                            print msg
                             self.ja_pub.publish(msg)
                         if self.read_AI[0] > 0:
                             self.ai_pub.publish(msg)
