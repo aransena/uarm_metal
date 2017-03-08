@@ -361,7 +361,7 @@ class UarmMetal():
 
         if command[0:4] == "BEEP":
             try:
-                info = map(float,command[4].split(','))
+                info = map(float,command[4:].split(','))
                 freq = info[0]
                 dur = info[1]
             except Exception as e:
