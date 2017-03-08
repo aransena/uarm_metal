@@ -279,10 +279,13 @@ class UarmMetal():
         print data.data
 
     def attach_write_callback(self, data):
+        rospy.loginfo("Attach")
         if data.data:
             self.request_attach()
+            rospy.loginfo("Attach")
         else:
             self.request_detach()
+            rospy.loginfo("Detach")
 
     def beep_write_callback(self, data):
         print data
