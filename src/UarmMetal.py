@@ -349,19 +349,19 @@ class UarmMetal():
         self.iq.send_to_queue(msg)
 
     def request_detach(self):
-        rospy.loginfo("uArm detach")
+        rospy.loginfo("Detach motors")
         self.iq.send_to_queue("DET")
 
     def request_attach(self):
-        rospy.loginfo("uArm attach")
+        rospy.loginfo("Attach motors")
         self.iq.send_to_queue("ATT")
 
     def pump_on(self):
-        rospy.loginfo("uArm Pump On")
+        rospy.loginfo("Pump On")
         self.iq.send_to_queue("PUMP_ON")
 
     def pump_off(self):
-        rospy.loginfo("uArm Pump Off")
+        rospy.loginfo("Pump Off")
         self.iq.send_to_queue("PUMP_OFF")
 
 # GETS
