@@ -11,6 +11,8 @@ from std_msgs.msg import String, Bool
 from std_msgs.msg import Float32MultiArray as Array
 from std_msgs.msg import MultiArrayDimension as ArrayDims
 
+from uarm_metal.msg import Position, JointAngles
+
 
 class UarmMetal():
 
@@ -115,13 +117,13 @@ class UarmMetal():
 
     def connect_to_ROS(self):
         self.string_read_pub = rospy.Publisher('uarm_metal/string_read', String, queue_size=10)
-        self.pos_pub = rospy.Publisher('uarm_metal/position_read', Array, queue_size=10)
-        self.ja_pub = rospy.Publisher('uarm_metal/joint_angles_read', Array, queue_size=10)
+        self.pos_pub = rospy.Publisher('uarm_metal/position_read', Position, queue_size=10)
+        self.ja_pub = rospy.Publisher('uarm_metal/joint_angles_read', JointAngles, queue_size=10)
         self.ai_pub = rospy.Publisher('uarm_metal/analog_inputs_read', String, queue_size=10)
 
         rospy.Subscriber("uarm_metal/string_write", String, self.string_write_callback, queue_size= 1000)
-        rospy.Subscriber("uarm_metal/position_write", Array, self.position_write_callback, queue_size=1000)
-        rospy.Subscriber("uarm_metal/joint_angles_write", Array, self.ja_write_callback, queue_size=1000)
+        rospy.Subscriber("uarm_metal/position_write", Position, self.position_write_callback, queue_size=1000)
+        rospy.Subscriber("uarm_metal/joint_angles_write", JointAngles, self.ja_write_callback, queue_size=1000)
         rospy.Subscriber("uarm_metal/pump", Bool, self.pump_write_callback, queue_size=1000)
         rospy.init_node('uarm_node', anonymous=True)
         self.ros_rate = rospy.Rate(self.ros_hz)
@@ -225,23 +227,34 @@ class UarmMetal():
                     try:
                         self.string_read_pub.publish(msg)
                         if self.read_pos > 0:
-                            dims = ArrayDims()
-                            dims.size = len(robot_values[0])
-                            pos_data = Array()
-                            pos_data.data = robot_values[0]
-                            pos_data.layout.dim.append(dims)
-
-                            #print type(pos_data), type(pos_data[0]), len(pos_data)
-                            #pos_msg = map(float,str(robot_values[0]).translate(None,'[]').split(','))
+                            # dims = ArrayDims()
+                            # dims.size = len(robot_values[0])
+                            # pos_data = Array()
+                            # pos_data.layout.dim.append(dims)
+                            # print type(pos_data), type(pos_data[0]), len(pos_data)
+                            # pos_msg = map(float,str(robot_values[0]).translate(None,'[]').split(','))
+                            pos_msg = Position()
+                            pos_data = robot_values[0]
+                            pos_msg.x = pos_data[0]
+                            pos_msg.y = pos_data[1]
+                            pos_msg.z = pos_data[2]
                             self.pos_pub.publish(pos_data)
+
                         if self.read_ja > 0:
-                            dims = ArrayDims()
-                            dims.size = len(robot_values[self.read_pos])
-                            ja_data = Array()
-                            ja_data.data = robot_values[self.read_pos]
-                            ja_data.layout.dim.append(dims)
+                            # dims = ArrayDims()
+                            # dims.size = len(robot_values[self.read_pos])
+                            # ja_data = Array()
+                            # ja_data.data = robot_values[self.read_pos]
+                            # ja_data.layout.dim.append(dims)
                             #ja_msg = map(float,str(ja_data).translate(None, '[]'))
-                            self.ja_pub.publish(ja_data)
+                            ja_msg = JointAngles()
+                            ja_data = robot_values[self.read_pos]
+                            ja_msg.j0 = ja_data[0]
+                            ja_msg.j1 = ja_data[1]
+                            ja_msg.j2 = ja_data[2]
+                            ja_msg.j3 = ja_data[3]
+
+                            self.ja_pub.publish(ja_msg)
 
                         if self.read_AI[0] > 0:
                             self.ai_pub.publish(str(robot_values[self.read_pos +
