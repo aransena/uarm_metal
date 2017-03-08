@@ -7,7 +7,7 @@ import rospy
 import ThreadSafePriorityQueue as tspq
 from uarm_decorators import *
 
-from std_msgs.msg import String
+from std_msgs.msg import String, Bool
 
 
 class UarmMetal():
@@ -29,11 +29,15 @@ class UarmMetal():
         self.parameter_monitor_thread = None
 
         self.uarm_read_thread = None
-        self.uarm_read_pub = None
+        self.string_read_pub = None
         self.rq = tspq.ThreadSafePriorityQueue("read_queue")
 
         self.uarm_interface_thread = None
         self.iq = tspq.ThreadSafePriorityQueue("interface_queue")
+
+        self.pos_pub = None
+        self.ja_pub = None
+        self.ai_pub = None
 
         self.playback_thread = None
         self.playback_active = False
@@ -108,8 +112,15 @@ class UarmMetal():
         rospy.set_param('uarm_metal/read_AI', self.read_AI)
 
     def connect_to_ROS(self):
-        self.uarm_read_pub = rospy.Publisher('uarm_read', String, queue_size=10)
-        rospy.Subscriber("uarm_write", String, self.uarm_write_callback, queue_size= 1000)
+        self.string_read_pub = rospy.Publisher('uarm_metal/string_read', String, queue_size=10)
+        self.pos_pub = rospy.Publisher('uarm_metal/position', String, queue_size=10)
+        self.ja_pub = rospy.Publisher('uarm_metal/joint_angles', String, queue_size=10)
+        self.ai_pub = rospy.Publisher('uarm_metal/analog_inputs', String, queue_size=10)
+
+        rospy.Subscriber("uarm_metal/string_write", String, self.string_write_callback, queue_size= 1000)
+        rospy.Subscriber("uarm_metal/position_write", String, self.position_write_callback, queue_size=1000)
+        rospy.Subscriber("uarm_metal/joint_angle_write", String, self.ja_write_callback, queue_size=1000)
+        rospy.Subscriber("uarm_metal/pump", Bool, self.pump_write_callback, queue_size=1000)
         rospy.init_node('uarm_node', anonymous=True)
         self.ros_rate = rospy.Rate(self.ros_hz)
 
@@ -199,30 +210,34 @@ class UarmMetal():
                     rospy.signal_shutdown("Normal Shutdown Procedure")
                     break
                 elif robot_values == "DONE":
-                    self.uarm_read_pub.publish("DONE")
+                    self.string_read_pub.publish("DONE")
                 else:
                     msg = str(robot_values)
                     msg = msg.translate(None, '[]')
-                    # try:
-                    #     print "val: ", msg == False, type(msg), str(msg)=="False", len(msg)
-                    # except:
-                    #     pass
+
                     if str(msg) == "False":
                         rospy.logerr("uArm read error")
                         rospy.signal_shutdown("uArm read error")
                         self.uarm.disconnect()
                         break
                     try:
-                        self.uarm_read_pub.publish(msg)
+                        self.string_read_pub.publish(msg)
+                        if self.read_pos > 0:
+                            self.pos_pub.publish(msg)
+                        if self.read_ja > 0:
+                            self.ja_pub.publish(msg)
+                        if self.read_AI[0] > 0:
+                            self.ai_pub.publish(msg)
+
                     except Exception as e:
                         err_msg = "Failed to publish data: ", e.message
                         rospy.logerr(err_msg)
                         rospy.signal_shutdown("Error Shutdown Procedure")
                         break
-        #time.sleep(1.0/self.ros_hz)
+        time.sleep(1.0/self.ros_hz)
         rospy.loginfo("uarm_read shutdown")
 
-    def uarm_write_callback(self, data):
+    def string_write_callback(self, data):
         if data.data == "CLEAR":
                 self.iq.get_from_queue(all_msgs=True)
                 self.rq.get_from_queue(all_msgs=True)
@@ -232,6 +247,21 @@ class UarmMetal():
                 self.iq.send_to_queue(msg, priority=1)
         else:
                 self.iq.send_to_queue(data.data)
+
+    def position_write_callback(self, data):
+        print data.data
+        # if data.data[0]:
+        #     msg = data.data[1:]
+        #     self.iq.send_to_queue(msg)
+
+    def ja_write_callback(self, data):
+        print data.data
+
+    def pump_write_callback(self, data):
+        print data.data
+        # if data.data[0]:
+        #     msg = data.data[1:]
+        #     self.iq.send_to_queue(msg)
 
 #ACTIONS Action request for uArm
 # Actions
