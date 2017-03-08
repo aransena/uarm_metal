@@ -28,11 +28,14 @@ def process(key):
         pass
     elif key == '4':
         pass
-
+    elif key == 'q':
+        global exit
+        exit = True
+        print 'Shutting Down!'
 
 if __name__ == '__main__':
     signal.signal(signal.SIGINT, shutdown_signal_handler)
-    print 'Ctrl+C to exit'
+    print 'Ctrl+C or q to exit'
     exit = False
     rospy.set_param('/uarm_metal/read_joint_angles', 1)
     rospy.set_param('/uarm_metal/read_position', 0)
