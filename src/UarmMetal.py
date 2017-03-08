@@ -236,7 +236,6 @@ class UarmMetal():
                         break
                     try:
                         self.string_read_pub.publish(msg)
-                        print robot_values
                         if self.read_pos > 0:
                             pos_msg = Position()
                             try:
@@ -246,7 +245,7 @@ class UarmMetal():
                                 pos_msg.z = pos_data[2]
                                 self.pos_pub.publish(pos_msg)
                             except Exception as e:
-                                print e
+                                #print e
                                 pass
 
                         if self.read_ja > 0:
@@ -260,7 +259,7 @@ class UarmMetal():
 
                                 self.ja_pub.publish(ja_msg)
                             except Exception as e:
-                                print e
+                                #print e
                                 pass
 
                         if self.read_AI[0] > 0:
@@ -269,7 +268,7 @@ class UarmMetal():
                                 ai_msg = str(ai_data).translate(None,'[]')
                                 self.ai_pub.publish(ai_msg)
                             except Exception as e:
-                                print e
+                                #print e
                                 pass
 
                         if self.read_DI[0] > 0:
@@ -278,7 +277,7 @@ class UarmMetal():
                                 di_msg = str(di_data).translate(None,'[]')
                                 self.di_pub.publish(di_msg)
                             except Exception as e:
-                                print e
+                                #print e
                                 pass
 
                     except Exception as e:
