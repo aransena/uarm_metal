@@ -227,6 +227,7 @@ class UarmMetal():
                         if self.read_pos > 0:
                             self.pos_pub.publish(str(robot_values[0]).translate(None,'[]'))
                         if self.read_ja > 0:
+                            print self.read_ja, type(self.read_ja)
                             self.ja_pub.publish(str(robot_values[self.read_pos +
                                                                  self.read_ja - 1]).translate(None, '[]'))
                         if self.read_AI[0] > 0:
