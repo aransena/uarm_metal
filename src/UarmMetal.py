@@ -8,6 +8,7 @@ import ThreadSafePriorityQueue as tspq
 from uarm_decorators import *
 
 from std_msgs.msg import String, Bool
+from std_msgs.msg import Float32MultiArray as Array
 
 
 class UarmMetal():
@@ -113,13 +114,13 @@ class UarmMetal():
 
     def connect_to_ROS(self):
         self.string_read_pub = rospy.Publisher('uarm_metal/string_read', String, queue_size=10)
-        self.pos_pub = rospy.Publisher('uarm_metal/position', String, queue_size=10)
-        self.ja_pub = rospy.Publisher('uarm_metal/joint_angles', String, queue_size=10)
+        self.pos_pub = rospy.Publisher('uarm_metal/position', Array, queue_size=10)
+        self.ja_pub = rospy.Publisher('uarm_metal/joint_angles', Array, queue_size=10)
         self.ai_pub = rospy.Publisher('uarm_metal/analog_inputs', String, queue_size=10)
 
         rospy.Subscriber("uarm_metal/string_write", String, self.string_write_callback, queue_size= 1000)
-        rospy.Subscriber("uarm_metal/position_write", String, self.position_write_callback, queue_size=1000)
-        rospy.Subscriber("uarm_metal/joint_angle_write", String, self.ja_write_callback, queue_size=1000)
+        rospy.Subscriber("uarm_metal/position_write", Array, self.position_write_callback, queue_size=1000)
+        rospy.Subscriber("uarm_metal/joint_angle_write", Array, self.ja_write_callback, queue_size=1000)
         rospy.Subscriber("uarm_metal/pump", Bool, self.pump_write_callback, queue_size=1000)
         rospy.init_node('uarm_node', anonymous=True)
         self.ros_rate = rospy.Rate(self.ros_hz)
