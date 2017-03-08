@@ -114,7 +114,8 @@ if __name__ == '__main__':
                 start = False
             try:
                 ja_pub.publish(play_data.pop(0))
-            except:
+            except Exception as e:
+                print e
                 play = False
                 start = True
                 beep_pub.publish(bp)
