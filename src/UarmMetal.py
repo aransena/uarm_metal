@@ -218,7 +218,7 @@ class UarmMetal():
                         rospy.logerr(err_msg)
                         rospy.signal_shutdown("Error Shutdown Procedure")
                         break
-        time.sleep(1.0/self.ros_hz)
+        #time.sleep(1.0/self.ros_hz)
         rospy.loginfo("uarm_read shutdown")
 
     def uarm_write_callback(self, data):
