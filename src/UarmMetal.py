@@ -273,7 +273,7 @@ class UarmMetal():
         #     self.iq.send_to_queue(msg)
 
     def ja_write_callback(self, data):
-        print data
+        self.request_ja(data)
 
     def pump_write_callback(self, data):
         print data.data
