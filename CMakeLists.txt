@@ -13,3 +13,14 @@ find_package(catkin REQUIRED COMPONENTS
 include_directories(
   ${catkin_INCLUDE_DIRS}
 )
+
+add_message_files(
+   FILES
+   Position.msg
+   JointAngles.msg
+)
+
+generate_messages(
+   DEPENDENCIES
+   std_msgs
+)
