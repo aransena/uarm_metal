@@ -229,10 +229,13 @@ class UarmMetal():
                             #pos_msg = map(float,str(robot_values[0]).translate(None,'[]').split(','))
                             self.pos_pub.publish(len(pos_data),pos_data)
                         if self.read_ja > 0:
-                            ja_data = robot_values[self.read_pos]
+                            try:
+                                ja_data = robot_values[self.read_pos]
                             #print ja_data
                             #ja_msg = map(float,str(ja_data).translate(None, '[]'))
-                            self.ja_pub.publish(len(ja_data),ja_data)
+                                self.ja_pub.publish(len(ja_data),ja_data)
+                            except Exception as e:
+                                print e
                         if self.read_AI[0] > 0:
                             self.ai_pub.publish(str(robot_values[self.read_pos +
                                                                  self.read_ja]).translate(None, '[]'))
