@@ -14,6 +14,10 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
+catkin_package(
+   CATKIN_DEPENDS message_runtime
+)
+
 add_message_files(
    FILES
    Position.msg
