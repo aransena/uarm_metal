@@ -239,31 +239,47 @@ class UarmMetal():
                         print robot_values
                         if self.read_pos > 0:
                             pos_msg = Position()
-                            pos_data = robot_values[0]
-                            pos_msg.x = pos_data[0]
-                            pos_msg.y = pos_data[1]
-                            pos_msg.z = pos_data[2]
-                            self.pos_pub.publish(pos_msg)
+                            try:
+                                pos_data = robot_values[0]
+                                pos_msg.x = pos_data[0]
+                                pos_msg.y = pos_data[1]
+                                pos_msg.z = pos_data[2]
+                                self.pos_pub.publish(pos_msg)
+                            except Exception as e:
+                                print e
+                                pass
 
                         if self.read_ja > 0:
                             ja_msg = JointAngles()
-                            ja_data = robot_values[self.read_pos]
-                            ja_msg.j0 = ja_data[0]
-                            ja_msg.j1 = ja_data[1]
-                            ja_msg.j2 = ja_data[2]
-                            ja_msg.j3 = ja_data[3]
+                            try:
+                                ja_data = robot_values[self.read_pos]
+                                ja_msg.j0 = ja_data[0]
+                                ja_msg.j1 = ja_data[1]
+                                ja_msg.j2 = ja_data[2]
+                                ja_msg.j3 = ja_data[3]
 
-                            self.ja_pub.publish(ja_msg)
+                                self.ja_pub.publish(ja_msg)
+                            except Exception as e:
+                                print e
+                                pass
 
                         if self.read_AI[0] > 0:
-                            ai_data = robot_values[self.read_pos + self.read_ja]
-                            ai_msg = str(ai_data).translate(None,'[]')
-                            self.ai_pub.publish(ai_msg)
+                            try:
+                                ai_data = robot_values[self.read_pos + self.read_ja]
+                                ai_msg = str(ai_data).translate(None,'[]')
+                                self.ai_pub.publish(ai_msg)
+                            except Exception as e:
+                                print e
+                                pass
 
                         if self.read_DI[0] > 0:
-                            di_data = robot_values[self.read_pos + self.read_ja + self.read_AI[0]]
-                            di_msg = str(di_data).translate(None,'[]')
-                            self.di_pub.publish(di_msg)
+                            try:
+                                di_data = robot_values[self.read_pos + self.read_ja + self.read_AI[0]]
+                                di_msg = str(di_data).translate(None,'[]')
+                                self.di_pub.publish(di_msg)
+                            except Exception as e:
+                                print e
+                                pass
 
                     except Exception as e:
                         err_msg = "Failed to publish data: ", e.message
