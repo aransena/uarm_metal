@@ -8,7 +8,7 @@ import ThreadSafePriorityQueue as tspq
 from uarm_decorators import *
 
 from std_msgs.msg import String, Bool
-from uarm_metal.msg import Position, JointAngles
+from uarm_metal.msg import Position, JointAngles, Beep
 
 
 class UarmMetal():
