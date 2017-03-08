@@ -118,15 +118,15 @@ if __name__ == '__main__':
                 ja_pub.publish(play_data.pop(0))
             except Exception as e:
                 print e
-                play = False
-                start = True
                 beep_pub.publish(bp)
+                play = False
 
         elif stop:
             att_pub.publish(False)
             beep_pub.publish(bp)
             start = True
             stop = False
+
 
         #time.sleep(1.0 / rw_rate)
 
