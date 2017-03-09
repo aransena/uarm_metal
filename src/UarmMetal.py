@@ -71,6 +71,9 @@ class UarmMetal():
         try:
             self.uarm = pyuarm.get_uarm()
             print "UARM: ", self.uarm
+        except Exception as e:
+            print "Connecting to uArm error: ", e
+        try:
             self.connected = True
             self.load_parameters()
             self.connect_to_ROS()
