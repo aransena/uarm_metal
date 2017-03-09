@@ -73,6 +73,7 @@ class UarmMetal():
             print "UARM: ", self.uarm
         except Exception as e:
             print "Connecting to uArm error: ", e
+            return False
         try:
             self.connected = True
             self.load_parameters()
@@ -80,6 +81,7 @@ class UarmMetal():
             self.start_threads()
             rospy.loginfo("Connected")
             self.ready = True
+            return True
         except Exception as e:
             self.connected = False
             err = str(e.message)

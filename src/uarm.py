@@ -14,13 +14,15 @@ def shutdown_signal_handler(signal, frame):
 if __name__ == '__main__':
     global exit
     uarm_interface = UarmMetal()
-    uarm_interface.connect()
+    startup_success = uarm_interface.connect()
+    if startup_success:
+        signal.signal(signal.SIGINT, shutdown_signal_handler)
+        print 'Ctrl+C to exit'
+        exit = False
 
-    signal.signal(signal.SIGINT, shutdown_signal_handler)
-    print 'Ctrl+C to exit'
-    exit = False
-
-    while uarm_interface.alive and exit is False:
-        time.sleep(1.0)
+        while uarm_interface.alive and exit is False:
+            time.sleep(1.0)
+    else:
+        print "startup error!"
 
 # program exit
