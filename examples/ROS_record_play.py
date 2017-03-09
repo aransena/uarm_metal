@@ -95,7 +95,7 @@ if __name__ == '__main__':
     beep_pub = rospy.Publisher('/uarm_metal/beep', Beep, queue_size=10)
 
     rospy.Subscriber("/uarm_metal/joint_angles_read", JointAngles, data_callback)
-    rospy.init_node('/record_play_node', anonymous=False)
+    rospy.init_node('record_play_node', anonymous=False)
 
     rw_rate = 1000.0
     rate = rospy.Rate(100)
