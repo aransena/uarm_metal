@@ -71,7 +71,7 @@ def on_press(key):
     elif key.char == '3':
         print "PLAY"
         if len(rec_data) > 0:
-            playback(rec_data)
+            start_playback(rec_data)
     elif key.char == '4':
         rec_data = []
         print "RESET"
