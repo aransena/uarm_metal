@@ -368,7 +368,7 @@ class UarmMetal():
 
     def monitor_ja_write(self):
         while True and (rospy.is_shutdown() is False):
-
+            print self.mq.queue.qsize(), self.moving
             if self.moving == False and self.mq.queue.qsize()>0:
                 try:
                     data = self.mq.get_from_queue()
@@ -382,7 +382,7 @@ class UarmMetal():
                     time.sleep(0.5)
                     pass
             else:
-                print self.moving
+                #print self.moving
                 time.sleep(0.01)
 
     def request_ja(self, data):
