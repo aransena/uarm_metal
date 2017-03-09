@@ -92,7 +92,7 @@ def on_press(key):
     elif key.char == '2':
         print "STOP"
         stop_ROS_sub(ja_sub)
-        print rec_data
+        print len(rec_data)
     elif key.char == '3':
         print "PLAY"
     elif key.char == '4':
