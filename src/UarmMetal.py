@@ -70,7 +70,7 @@ class UarmMetal():
     def connect(self):
         try:
             self.uarm = pyuarm.get_uarm()
-            print self.uarm
+            print "UARM: ", self.uarm
             self.connected = True
             self.load_parameters()
             self.connect_to_ROS()
