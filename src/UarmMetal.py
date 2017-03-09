@@ -128,7 +128,7 @@ class UarmMetal():
         self.ai_pub = rospy.Publisher('analog_inputs_read', String, queue_size=10)
         self.di_pub = rospy.Publisher('digital_inputs_read', String, queue_size=10)
         #  uarm_metal
-        ns = 'uarm_metal'
+        ns = '/uarm_metal'
         try:
             print "NAMESP: ", rospy.get_namespace()
         except Exception as e:
