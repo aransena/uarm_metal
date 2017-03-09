@@ -17,7 +17,10 @@ def shutdown_signal_handler(signal, frame):
 
 def data_callback(data):
     global rec_data
+    rate = rospy.Rate(20)
     rec_data.append(data)
+    rate.sleep()
+
 
 def start_record():
     global rec_data
