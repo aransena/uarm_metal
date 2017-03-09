@@ -324,6 +324,7 @@ class UarmMetal():
 
     def ja_write_callback(self, data):
         self.request_ja(data)
+        self.ros_rate.sleep()
 
     def pump_write_callback(self, data):
         if data.data:
@@ -435,7 +436,7 @@ class UarmMetal():
             angle = map(float, command[2:].split(','))
             for i in range(0, len(angle)):
                 self.uarm.set_servo_angle(i, angle[i])
-            self.ros_rate.sleep()
+            #self.ros_rate.sleep()
             #time.sleep(0.2)
 
         if command[0:4] == "BEEP":
