@@ -227,7 +227,7 @@ class UarmMetal():
             else:
                 self.process_command(request)
                 #if self.playback_active is False and self.loading is False:
-                self.iq.send_to_queue("READ")
+                self.iq.send_to_queue("READ",priority=1)
             time.sleep(1)
             print "here"
 
