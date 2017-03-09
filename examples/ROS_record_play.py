@@ -10,6 +10,7 @@ global record
 global play
 global stop
 global reset
+global rec_data
 
 def shutdown_signal_handler(signal, frame):
     global exit
@@ -90,12 +91,12 @@ def on_press(key):
         print "RESET"
 
 if __name__ == '__main__':
-
-   with keyboard.Listener(on_press=on_press) as listener:
-       try:
-           listener.join()
-       except Exception as e:
-           print "Error", e
+    print "Start."
+    with keyboard.Listener(on_press=on_press) as listener:
+        try:
+            listener.join()
+        except Exception as e:
+            print "Error", e
     #
     # record = False
     # play = False
