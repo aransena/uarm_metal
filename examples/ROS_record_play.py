@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-import signal
 import rospy
 from pynput import keyboard
 import threading
 
+from std_msgs.msg import Bool
 from uarm_metal.msg import JointAngles, Beep
 
 
@@ -29,21 +29,23 @@ def start_record():
     return data_sub
 
 def start_playback(data):
-    global data_pub
-
     ns = "/uarm_metal/"
     data_pub = rospy.Publisher(ns + 'joint_angles_write', JointAngles, queue_size=10)
-
-    pub_thread = threading.Thread(target=play, args=(data, data_pub,))
+    att_pub = rospy.Publisher(ns + 'attach', Bool, queue_size=10)
+    att_pub.publish(Bool(True))
+    pub_thread = threading.Thread(target=play, args=(data, data_pub, att_pub))
     pub_thread.daemon = True
     pub_thread.start()
 
     return data_pub
 
-def play(data, pub):
+def play(data, data_pub, att_pub):
+    rate = rospy.rate = 20
     for point in data:
-        pub.publish(data)
+        data_pub.publish(point)
+        rate.sleep()
 
+    att_pub.publish(Bool(False))
     print "Done!"
 
 
