@@ -370,17 +370,17 @@ class UarmMetal():
         while True and (rospy.is_shutdown() is False):
             print self.mq.queue.qsize(), self.moving
             if self.moving == False and self.mq.queue.qsize()>0:
-                try:
-                    data = self.mq.get_from_queue()
-                    msg = "JA" + str(round(data.j0,0)) + "," + str(round(data.j1,0)) \
-                          + "," + str(round(data.j2,0)) + "," + str(round(data.j3,0))
-                    print msg, map(float, msg[2:].split(','))
-                    self.iq.send_to_queue(msg)
-                    if self.mq.queue.qsize() != 0:
-                        self.request_move_check()
-                except Exception as e:
-                    time.sleep(0.5)
-                    pass
+                # try:
+                data = self.mq.get_from_queue()
+                msg = "JA" + str(round(data.j0,0)) + "," + str(round(data.j1,0)) \
+                      + "," + str(round(data.j2,0)) + "," + str(round(data.j3,0))
+                print msg, map(float, msg[2:].split(','))
+                self.iq.send_to_queue(msg)
+                if self.mq.queue.qsize() != 0:
+                    self.request_move_check()
+                # except Exception as e:
+                #     time.sleep(0.5)
+                #     pass
             else:
                 #print self.moving
                 time.sleep(0.01)
