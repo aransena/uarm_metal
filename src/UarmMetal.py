@@ -324,7 +324,7 @@ class UarmMetal():
 
     def ja_write_callback(self, data):
         self.request_ja(data)
-        rr = rospy.rate(1)
+        rr = rospy.Rate(1)
         rr.sleep()
 
     def pump_write_callback(self, data):
