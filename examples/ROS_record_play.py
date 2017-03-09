@@ -23,8 +23,9 @@ def start_record():
     global rec_data
     global data_sub
     global publishers
+    global ns
     rec_data = []
-    ns = "/uarm_metal/"
+
     publishers['attach'].publish(Bool(False))
 
     data_sub = rospy.Subscriber(ns + "joint_angles_read", JointAngles, data_callback)
@@ -93,8 +94,10 @@ if __name__ == '__main__':
     global rec_data
     global publishers
     global data_sub
+    global ns
     data_sub = None
 
+    ns = "/uarm_metal/"
     data_pub = rospy.Publisher(ns + 'joint_angles_write', JointAngles, queue_size=10)
     att_pub = rospy.Publisher(ns + 'attach', Bool, queue_size=10)
 
