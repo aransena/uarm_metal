@@ -65,9 +65,7 @@ def process_key(key):
     global publishers
     global data_sub
 
-    if key == keyboard.Key.esc:
-        raise Exception(key)
-    elif key.char == '1':
+    if key.char == '1':
         data_sub = start_record()
         print "RECORD"
     elif key.char == '2':
@@ -83,12 +81,15 @@ def process_key(key):
         print "RESET"
 
 def on_press(key):
-    try:
-        key.char
-        process_key(key)
-    except:
-        print "Key cannot be processed"
-        pass
+    if key == keyboard.Key.esc:
+        raise Exception(key)
+    else:
+        try:
+            key.char
+            process_key(key)
+        except:
+            print "Key cannot be processed"
+            pass
 
 if __name__ == '__main__':
     global rec_data
