@@ -115,11 +115,17 @@ if __name__ == '__main__':
         key = getch.getch()
         process(key)
 
+        true_m = Bool()
+        true_m.data = True
+
+        false_m = Bool()
+        false_m.data = True
+
         if record:
             #att_pub.publish(False)
             if start:
                 print "record"
-                att_pub.publish(False)
+                att_pub.publish(false_m)
                 beep_pub.publish(bp)
                 start = False
 
@@ -127,7 +133,7 @@ if __name__ == '__main__':
             if start:
                 print "play"
                 play_data = rec_data[:]
-                att_pub.publish(True)
+                att_pub.publish(true_m)
                 beep_pub.publish(bp)
                 time.sleep(0.5)
                 start = False
@@ -140,7 +146,7 @@ if __name__ == '__main__':
 
         elif stop:
             print "stop"
-            att_pub.publish(False)
+            att_pub.publish(false_m)
             beep_pub.publish(bp)
             start = True
             stop = False
