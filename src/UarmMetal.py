@@ -72,7 +72,7 @@ class UarmMetal():
             self.uarm = pyuarm.get_uarm()
             print "UARM: ", self.uarm
         except Exception as e:
-            print "Connecting to uArm error: ", e
+            print "Connecting to uArm error, check connection: ", e
             return False
         try:
             self.connected = True
