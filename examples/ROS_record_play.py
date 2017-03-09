@@ -65,20 +65,24 @@ def process(key):
 
 def start_record():
     global rec_data
+    global ja_sub
     rec_data = []
     ns = "/uarm_metal/"
 
-    rospy.Subscriber(ns + "joint_angles_read", JointAngles, data_callback)
+    ja_sub = rospy.Subscriber(ns + "joint_angles_read", JointAngles, data_callback)
+    return ja_sub
 
-def stop_ROS_process():
+def stop_ROS_sub(sub):
     try:
-        rospy.signal_shutdown("Stop Rec/Play")
+        #rospy.signal_shutdown("Stop Rec/Play")
+        sub.unregister()
     except Exception as e:
         print "Error in stop_ROS_processes(): ", e
         pass
 
 def on_press(key):
     global rec_data
+    global ja_sub
 
     if key == keyboard.Key.esc:
         raise Exception(key)
@@ -87,11 +91,12 @@ def on_press(key):
         print "RECORD"
     elif key.char == '2':
         print "STOP"
-        stop_ROS_process()
+        stop_ROS_sub(ja_sub)
         print rec_data
     elif key.char == '3':
         print "PLAY"
     elif key.char == '4':
+        rec_data = []
         print "RESET"
 
 if __name__ == '__main__':
