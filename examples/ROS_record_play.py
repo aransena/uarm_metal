@@ -69,7 +69,7 @@ def start_record():
     ns = "/uarm_metal/"
 
     rospy.Subscriber(ns + "joint_angles_read", JointAngles, data_callback)
-    rospy.spin()
+    #rospy.spin()
 
 def on_press(key):
     global rec_data
