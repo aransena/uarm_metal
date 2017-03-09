@@ -40,10 +40,10 @@ def start_playback(data):
 
     return data_pub
 
-def play(data):
+def play(*args):
     global publishers
     rate = rospy.Rate(20)
-    for point in data:
+    for point in args[0]:
         publishers['data'].publish(point)
         rate.sleep()
 
