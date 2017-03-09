@@ -94,6 +94,7 @@ def on_press(key):
 if __name__ == '__main__':
     global rec_data
     rec_data = []
+    ns = "/uarm_metal/"
     rospy.set_param(ns + 'read_joint_angles', 1)
     rospy.set_param(ns + 'read_position', 0)
 
