@@ -129,19 +129,21 @@ class UarmMetal():
             print "Couldn't get ns: ", e
 
         rospy.init_node(ns, anonymous=False)
-        self.string_read_pub = rospy.Publisher('string_read', String, queue_size=10)
-        self.pos_pub = rospy.Publisher('position_read', Position, queue_size=10)
-        self.ja_pub = rospy.Publisher('joint_angles_read', JointAngles, queue_size=10)
-        self.ai_pub = rospy.Publisher('analog_inputs_read', String, queue_size=10)
-        self.di_pub = rospy.Publisher('digital_inputs_read', String, queue_size=10)
+
+        ns += "/"
+        self.string_read_pub = rospy.Publisher(ns + 'string_read', String, queue_size=10)
+        self.pos_pub = rospy.Publisher(ns + 'position_read', Position, queue_size=10)
+        self.ja_pub = rospy.Publisher(ns + 'joint_angles_read', JointAngles, queue_size=10)
+        self.ai_pub = rospy.Publisher(ns + 'analog_inputs_read', String, queue_size=10)
+        self.di_pub = rospy.Publisher(ns + 'digital_inputs_read', String, queue_size=10)
         #  uarm_metal
 
-        rospy.Subscriber(ns+"/string_write", String, self.string_write_callback, queue_size= 1000)
-        rospy.Subscriber(ns+"/position_write", Position, self.position_write_callback, queue_size=1000)
-        rospy.Subscriber(ns+"/joint_angles_write", JointAngles, self.ja_write_callback, queue_size=1000)
-        rospy.Subscriber(ns+"/pump", Bool, self.pump_write_callback, queue_size=1000)
-        rospy.Subscriber(ns+"/attach", Bool, self.attach_write_callback, queue_size=1000)
-        rospy.Subscriber(ns+"/beep", Beep, self.beep_write_callback, queue_size=1000)
+        rospy.Subscriber(ns+"string_write", String, self.string_write_callback, queue_size= 1000)
+        rospy.Subscriber(ns+"position_write", Position, self.position_write_callback, queue_size=1000)
+        rospy.Subscriber(ns+"joint_angles_write", JointAngles, self.ja_write_callback, queue_size=1000)
+        rospy.Subscriber(ns+"pump", Bool, self.pump_write_callback, queue_size=1000)
+        rospy.Subscriber(ns+"attach", Bool, self.attach_write_callback, queue_size=1000)
+        rospy.Subscriber(ns+"beep", Beep, self.beep_write_callback, queue_size=1000)
 
         self.ros_rate = rospy.Rate(self.ros_hz)
 
