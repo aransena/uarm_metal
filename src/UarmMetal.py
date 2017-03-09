@@ -354,7 +354,7 @@ class UarmMetal():
     def request_ja(self, data):
         msg = "JA" + str(round(data.j0,2)) + "," + str(round(data.j1,2)) \
               + "," + str(round(data.j2,2)) + "," + str(round(data.j3,2))
-        print msg
+        print msg, map(float, msg[2:].split(','))
         self.iq.send_to_queue(msg)
 
     def request_beep(self, data):
