@@ -228,7 +228,8 @@ class UarmMetal():
                 self.process_command(request)
                 #if self.playback_active is False and self.loading is False:
                 self.iq.send_to_queue("READ")
-
+            time.sleep(1)
+            print "here"
 
         rospy.loginfo("uarm_interface shutdown")
         self.shutdown()
@@ -324,8 +325,6 @@ class UarmMetal():
 
     def ja_write_callback(self, data):
         self.request_ja(data)
-        rr = rospy.Rate(1)
-        rr.sleep()
 
     def pump_write_callback(self, data):
         if data.data:
