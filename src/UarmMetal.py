@@ -322,6 +322,8 @@ class UarmMetal():
 
     def ja_write_callback(self, data):
         self.request_ja(data)
+        while self.uarm.is_moving():
+            time.sleep(0.01)
        # time.sleep(0.05)
 
     def pump_write_callback(self, data):
