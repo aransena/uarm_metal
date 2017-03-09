@@ -92,7 +92,7 @@ def on_press(key):
             key.char
             process_key(key)
         except:
-            print "Key cannot be processed"
+            #print "Key cannot be processed"
             pass
 
 if __name__ == '__main__':
@@ -130,12 +130,13 @@ if __name__ == '__main__':
 
     rospy.init_node('record_node', anonymous=False)
 
-    print "Start."
+    print "Start. Press esc key to exit."
     with keyboard.Listener(on_press=on_press) as listener:
         try:
             listener.join()
         except Exception as e:
-            print "Error", e
+            pass
+            #print "Error", e
 
 
     #
