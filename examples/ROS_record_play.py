@@ -24,6 +24,9 @@ def start_record():
     global data_sub
     rec_data = []
     ns = "/uarm_metal/"
+    att_pub = rospy.Publisher(ns + 'attach', Bool, queue_size=10)
+    att_pub.publish(Bool(False))
+    att_pub.unregister()
 
     data_sub = rospy.Subscriber(ns + "joint_angles_read", JointAngles, data_callback)
     return data_sub
@@ -46,6 +49,9 @@ def play(data, data_pub, att_pub):
         rate.sleep()
 
     att_pub.publish(Bool(False))
+
+    data_pub.unregister()
+    att_pub.unregister()
     print "Done!"
 
 
