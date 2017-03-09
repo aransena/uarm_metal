@@ -376,7 +376,7 @@ class UarmMetal():
                       + "," + str(round(data.j2,0)) + "," + str(round(data.j3,0))
                 print msg, map(float, msg[2:].split(','))
                 self.iq.send_to_queue(msg)
-                time.sleep(0.05)
+                time.sleep(0.5)
                 if self.mq.queue.qsize() > 0:
                     print "CHK"
                     self.request_move_check()
