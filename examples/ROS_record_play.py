@@ -40,7 +40,7 @@ def start_playback(data):
     return data_pub
 
 def play(data, data_pub, att_pub):
-    rate = rospy.rate = 20
+    rate = rospy.Rate(20)
     for point in data:
         data_pub.publish(point)
         rate.sleep()
