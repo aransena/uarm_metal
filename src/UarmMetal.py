@@ -128,13 +128,14 @@ class UarmMetal():
         self.ai_pub = rospy.Publisher('analog_inputs_read', String, queue_size=10)
         self.di_pub = rospy.Publisher('digital_inputs_read', String, queue_size=10)
         #  uarm_metal
-        rospy.Subscriber("string_write", String, self.string_write_callback, queue_size= 1000)
-        rospy.Subscriber("position_write", Position, self.position_write_callback, queue_size=1000)
-        rospy.Subscriber("joint_angles_write", JointAngles, self.ja_write_callback, queue_size=1000)
-        rospy.Subscriber("pump", Bool, self.pump_write_callback, queue_size=1000)
-        rospy.Subscriber("attach", Bool, self.attach_write_callback, queue_size=1000)
-        rospy.Subscriber("beep", Beep, self.beep_write_callback, queue_size=1000)
-        rospy.init_node('uarm_metal', anonymous=True)
+        ns = 'uarm_metal'
+        rospy.Subscriber(ns+"/string_write", String, self.string_write_callback, queue_size= 1000)
+        rospy.Subscriber(ns+"/position_write", Position, self.position_write_callback, queue_size=1000)
+        rospy.Subscriber(ns+"/joint_angles_write", JointAngles, self.ja_write_callback, queue_size=1000)
+        rospy.Subscriber(ns+"/pump", Bool, self.pump_write_callback, queue_size=1000)
+        rospy.Subscriber(ns+"/attach", Bool, self.attach_write_callback, queue_size=1000)
+        rospy.Subscriber(ns+"/beep", Beep, self.beep_write_callback, queue_size=1000)
+        rospy.init_node(ns, anonymous=True)
         self.ros_rate = rospy.Rate(self.ros_hz)
 
         rospy.loginfo("Done loading parameters.")
