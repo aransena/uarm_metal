@@ -19,9 +19,6 @@ def shutdown_signal_handler(signal, frame):
 def data_callback(data):
     global rec_data
     rec_data.append(data)
-    time.sleep(0.05)
-
-
 
 def start_record():
     global rec_data
@@ -47,7 +44,8 @@ def start_playback(data):
 def play(*args):
     global publishers
     global beeps
-    rate = rospy.Rate(20)
+    rate = rospy.Rate(5)
+    rate = rospy.Rate(5)
     for point in args:
         publishers['data'].publish(point)
         rate.sleep()
