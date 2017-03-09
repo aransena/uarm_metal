@@ -22,7 +22,7 @@ if __name__ == '__main__':
     rospy.init_node('record_play_node', anonymous=False)
     beep_pub = rospy.Publisher(ns + 'beep', Beep, queue_size=10)
 
-    rate = rospy.Rate(20)
+    rate = rospy.Rate(0.5)
 
     bp = Beep()
     bp.frequency = 12000
