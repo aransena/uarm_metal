@@ -83,6 +83,7 @@ def on_press(key):
     if key == keyboard.Key.esc:
         raise Exception(key)
     elif key.char == '1':
+        start_record()
         print "RECORD"
     elif key.char == '2':
         print "STOP"
