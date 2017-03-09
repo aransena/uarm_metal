@@ -227,7 +227,7 @@ class UarmMetal():
                 self.process_command(request)
                 #if self.playback_active is False and self.loading is False:
                 self.iq.send_to_queue("READ")
-                time.sleep(0.1)
+            time.sleep(0.1)
 
         rospy.loginfo("uarm_interface shutdown")
         self.shutdown()
