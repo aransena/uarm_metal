@@ -209,7 +209,7 @@ class UarmMetal():
 
         while True and (rospy.is_shutdown() is False):
             request = self.iq.get_from_queue()
-
+            print request
             if request == "READ":
                 curr_vals = self.get_read_data()
                 try:
@@ -229,7 +229,6 @@ class UarmMetal():
                 #if self.playback_active is False and self.loading is False:
                 self.iq.send_to_queue("READ",priority=1)
             time.sleep(1)
-            print "here"
 
         rospy.loginfo("uarm_interface shutdown")
         self.shutdown()
