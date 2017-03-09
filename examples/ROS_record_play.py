@@ -91,12 +91,14 @@ if __name__ == '__main__':
     rospy.set_param(ns + 'read_digital_inputs', [0,0])
     rospy.set_param(ns + 'read_analog_inputs', [0,0])
 
+    rospy.init_node('record_play_node', anonymous=False)
+
     ja_pub = rospy.Publisher(ns + 'joint_angles_write', JointAngles, queue_size=10)
     att_pub = rospy.Publisher(ns + 'attach', Bool, queue_size=10)
     beep_pub = rospy.Publisher(ns + 'beep', Beep, queue_size=10)
 
     rospy.Subscriber(ns + "joint_angles_read", JointAngles, data_callback)
-    rospy.init_node('record_play_node', anonymous=False)
+
 
     rw_rate = 1000.0
     rate = rospy.Rate(100)
