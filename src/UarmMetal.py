@@ -209,7 +209,6 @@ class UarmMetal():
 
         while True and (rospy.is_shutdown() is False):
             request = self.iq.get_from_queue()
-            print request
             if request == "READ":
                 curr_vals = self.get_read_data()
                 try:
@@ -228,7 +227,6 @@ class UarmMetal():
                 self.process_command(request)
                 #if self.playback_active is False and self.loading is False:
                 self.iq.send_to_queue("READ",priority=1)
-            time.sleep(1)
 
         rospy.loginfo("uarm_interface shutdown")
         self.shutdown()
@@ -324,6 +322,7 @@ class UarmMetal():
 
     def ja_write_callback(self, data):
         self.request_ja(data)
+        time.sleep(0.1)
 
     def pump_write_callback(self, data):
         if data.data:
