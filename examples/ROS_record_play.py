@@ -70,11 +70,11 @@ def start_record():
     global rec_data
     rec_data = []
     ns = "/uarm_metal/"
-    rospy.set_param(ns + 'read_joint_angles', 1)
-    rospy.set_param(ns + 'read_position', 0)
-
-    rospy.init_node('record_node', anonymous=False)
-    rospy.Subscriber(ns + "joint_angles_read", JointAngles, data_callback)
+    # rospy.set_param(ns + 'read_joint_angles', 1)
+    # rospy.set_param(ns + 'read_position', 0)
+    #
+    # rospy.init_node('record_node', anonymous=False)
+    # rospy.Subscriber(ns + "joint_angles_read", JointAngles, data_callback)
 #    rospy.spin()
 
 def on_press(key):
