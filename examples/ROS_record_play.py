@@ -69,7 +69,13 @@ def start_record():
     ns = "/uarm_metal/"
 
     rospy.Subscriber(ns + "joint_angles_read", JointAngles, data_callback)
-    #rospy.spin()
+
+def stop_ROS_process():
+    try:
+        rospy.signal_shutdown("Stop Rec/Play")
+    except Exception as e:
+        print "Error in stop_ROS_processes(): ", e
+        pass
 
 def on_press(key):
     global rec_data
@@ -81,7 +87,7 @@ def on_press(key):
         print "RECORD"
     elif key.char == '2':
         print "STOP"
-        rospy.signal_shutdown("Stop Rec/Play")
+        stop_ROS_process()
         print rec_data
     elif key.char == '3':
         print "PLAY"
