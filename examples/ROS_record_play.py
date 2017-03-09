@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import signal
-import time
 import rospy
 
 # http://stackoverflow.com/questions/36714728/pip-install-getch-clang-error
@@ -118,8 +117,9 @@ if __name__ == '__main__':
         if record:
             #att_pub.publish(False)
             if start:
-                print "record"
+                print "Record"
                 att_pub.publish(Bool(False))
+                print "Beep"
                 beep_pub.publish(bp)
                 start = False
 
@@ -129,7 +129,6 @@ if __name__ == '__main__':
                 play_data = rec_data[:]
                 att_pub.publish(Bool(True))
                 beep_pub.publish(bp)
-                time.sleep(0.5)
                 start = False
             try:
                 ja_pub.publish(play_data.pop(0))
