@@ -17,6 +17,8 @@ if __name__ == '__main__':
     print 'Ctrl+C or q to exit'
     exit = False
 
+    ns = "/uarm_metal/"
+
     rospy.init_node('record_play_node', anonymous=False)
     beep_pub = rospy.Publisher(ns + 'beep', Beep, queue_size=10)
 
