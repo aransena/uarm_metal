@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import rospy
+import time
 from pynput import keyboard
 import threading
 
@@ -17,9 +18,9 @@ def shutdown_signal_handler(signal, frame):
 
 def data_callback(data):
     global rec_data
-    rate = rospy.Rate(20)
     rec_data.append(data)
-    rate.sleep()
+    time.sleep(0.05)
+
 
 
 def start_record():
