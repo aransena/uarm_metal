@@ -59,10 +59,11 @@ def stop_ROS_sub(sub):
         print "Error in stop_ROS_processes(): ", e
         pass
 
-def on_press(key):
+def process_key(key):
     global rec_data
     global publishers
     global data_sub
+
     if key == keyboard.Key.esc:
         raise Exception(key)
     elif key.char == '1':
@@ -79,6 +80,13 @@ def on_press(key):
     elif key.char == '4':
         rec_data = []
         print "RESET"
+
+def on_press(key):
+    try:
+        process_key(key)
+    except:
+        print "Key cannot be processed"
+        pass
 
 if __name__ == '__main__':
     global rec_data
