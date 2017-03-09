@@ -70,7 +70,6 @@ class UarmMetal():
     def connect(self):
         try:
             self.uarm = pyuarm.get_uarm()
-            print "UARM: ", self.uarm.get_hardware_version()
         except Exception as e:
             print "Connecting to uArm error, check connection: ", e
             return False
@@ -135,7 +134,7 @@ class UarmMetal():
         rospy.Subscriber("uarm_metal/pump", Bool, self.pump_write_callback, queue_size=1000)
         rospy.Subscriber("uarm_metal/attach", Bool, self.attach_write_callback, queue_size=1000)
         rospy.Subscriber("uarm_metal/beep", Beep, self.beep_write_callback, queue_size=1000)
-        rospy.init_node('uarm_node', anonymous=True)
+        rospy.init_node('uarm_metal', anonymous=True)
         self.ros_rate = rospy.Rate(self.ros_hz)
 
         rospy.loginfo("Done loading parameters.")
