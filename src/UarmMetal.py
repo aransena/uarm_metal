@@ -379,7 +379,7 @@ class UarmMetal():
                 if self.mq.queue.qsize() > 0:
                     print "CHK"
                     self.request_move_check()
-                time.sleep(0.1)
+                time.sleep(0.01)
                 # except Exception as e:
                 #     time.sleep(0.5)
                 #     pass
