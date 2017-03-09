@@ -123,10 +123,10 @@ class UarmMetal():
 
     def connect_to_ROS(self):
         self.string_read_pub = rospy.Publisher('uarm_metal/string_read', String, queue_size=10)
-        self.pos_pub = rospy.Publisher('uarm_metal/position_read', Position, queue_size=10)
-        self.ja_pub = rospy.Publisher('uarm_metal/joint_angles_read', JointAngles, queue_size=10)
-        self.ai_pub = rospy.Publisher('uarm_metal/analog_inputs_read', String, queue_size=10)
-        self.di_pub = rospy.Publisher('uarm_metal/digital_inputs_read', String, queue_size=10)
+        self.pos_pub = rospy.Publisher('position_read', Position, queue_size=10)
+        self.ja_pub = rospy.Publisher('joint_angles_read', JointAngles, queue_size=10)
+        self.ai_pub = rospy.Publisher('analog_inputs_read', String, queue_size=10)
+        self.di_pub = rospy.Publisher('digital_inputs_read', String, queue_size=10)
         #  uarm_metal
         rospy.Subscriber("string_write", String, self.string_write_callback, queue_size= 1000)
         rospy.Subscriber("position_write", Position, self.position_write_callback, queue_size=1000)
