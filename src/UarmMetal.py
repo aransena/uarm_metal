@@ -434,7 +434,7 @@ class UarmMetal():
             for i in range(0, len(angle)):
                 self.uarm.set_servo_angle(i, angle[i])
 
-            time.sleep(0.05)
+            time.sleep(0.2)
 
         if command[0:4] == "BEEP":
             try:
