@@ -43,7 +43,7 @@ def start_playback(data):
 def play(*args):
     global publishers
     global beeps
-    rate = rospy.Rate(40)
+    rate = rospy.Rate(30)
     for point in args:
         publishers['data'].publish(point)
         rate.sleep()
