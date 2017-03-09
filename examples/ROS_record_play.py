@@ -75,7 +75,7 @@ def start_record():
 
     rospy.init_node('record_node', anonymous=False)
     rospy.Subscriber(ns + "joint_angles_read", JointAngles, data_callback)
-    rospy.spin()
+#    rospy.spin()
 
 def on_press(key):
     global rec_data
