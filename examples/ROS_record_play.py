@@ -47,7 +47,7 @@ def play(*args):
     rate = rospy.Rate(10)
     for point in args:
         publishers['data'].publish(point)
-        rate.sleep()
+        #rate.sleep()
 
     publishers['attach'].publish(Bool(False))
     publishers['beep'].publish(beeps['bad'])

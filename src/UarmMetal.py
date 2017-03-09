@@ -386,8 +386,8 @@ class UarmMetal():
                 time.sleep(0.01)
 
     def request_ja(self, data):
-        msg = "JA" + str(round(data.j0,0)) + "," + str(round(data.j1,0)) \
-              + "," + str(round(data.j2,0)) + "," + str(round(data.j3,0))
+        msg = "JA" + str(round(data.j0,2)) + "," + str(round(data.j1,2)) \
+              + "," + str(round(data.j2,2)) + "," + str(round(data.j3,2))
         print msg, map(float, msg[2:].split(','))
         self.iq.send_to_queue(msg)
 
