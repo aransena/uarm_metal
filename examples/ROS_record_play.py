@@ -48,10 +48,6 @@ def play(*args):
         publishers['data'].publish(point)
         #rate.sleep()
 
-    publishers['attach'].publish(Bool(False))
-    publishers['beep'].publish(beeps['good'])
-    print "Done!"
-
 
 def stop_ROS_sub(sub):
     try:
@@ -72,6 +68,7 @@ def process_key(key):
         print "RECORD"
     elif key.char == '2':
         print "STOP"
+        publishers['attach'].publish(Bool(False))
         stop_ROS_sub(data_sub)
         print len(rec_data)
     elif key.char == '3':
