@@ -2,15 +2,13 @@
 import signal
 import rospy
 from pynput import keyboard
-# from std_msgs.msg import String, Bool
+import threading
+
 from uarm_metal.msg import JointAngles, Beep
 
 
-global record
-global play
-global stop
-global reset
 global rec_data
+global data_sub
 
 def shutdown_signal_handler(signal, frame):
     global exit
@@ -21,56 +19,33 @@ def data_callback(data):
     global rec_data
     rec_data.append(data)
 
-
-def process(key):
-    global record
-    global play
-    global stop
-    global reset
-    global rec_data
-
-    if key == '1':
-        print "RECORD"
-        record = True
-        stop = False
-        play = False
-        reset = False
-
-    elif key == '2':
-        print "STOP"
-        stop = True
-        record = False
-        play = False
-        reset = False
-
-    elif key == '3':
-        print "PLAY"
-        play = True
-        stop = False
-        record = False
-        reset = False
-
-    elif key == '4':
-        print "RESET"
-        reset = True
-        stop = True
-        record = False
-        play = False
-        rec_data = []
-
-    elif key == 'q':
-        global exit
-        exit = True
-        print 'Shutting Down!'
-
 def start_record():
     global rec_data
-    global ja_sub
+    global data_sub
     rec_data = []
     ns = "/uarm_metal/"
 
-    ja_sub = rospy.Subscriber(ns + "joint_angles_read", JointAngles, data_callback)
-    return ja_sub
+    data_sub = rospy.Subscriber(ns + "joint_angles_read", JointAngles, data_callback)
+    return data_sub
+
+def start_playback(data):
+    global data_pub
+
+    ns = "/uarm_metal/"
+    data_pub = rospy.Publisher(ns + 'joint_angles_write', JointAngles, queue_size=10)
+
+    pub_thread = threading.Thread(target=play, args=(data, data_pub,))
+    pub_thread.daemon = True
+    pub_thread.start()
+
+    return data_pub
+
+def play(data, pub):
+    for point in data:
+        pub.publish(data)
+
+    print "Done!"
+
 
 def stop_ROS_sub(sub):
     try:
@@ -82,7 +57,7 @@ def stop_ROS_sub(sub):
 
 def on_press(key):
     global rec_data
-    global ja_sub
+    global data_sub
 
     if key == keyboard.Key.esc:
         raise Exception(key)
@@ -91,10 +66,12 @@ def on_press(key):
         print "RECORD"
     elif key.char == '2':
         print "STOP"
-        stop_ROS_sub(ja_sub)
+        stop_ROS_sub(data_sub)
         print len(rec_data)
     elif key.char == '3':
         print "PLAY"
+        if len(rec_data) > 0:
+            playback(rec_data)
     elif key.char == '4':
         rec_data = []
         print "RESET"
@@ -114,6 +91,8 @@ if __name__ == '__main__':
             listener.join()
         except Exception as e:
             print "Error", e
+
+
     #
     # record = False
     # play = False
