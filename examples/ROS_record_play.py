@@ -22,32 +22,31 @@ def data_callback(data):
 def start_record():
     global rec_data
     global data_sub
+    global publishers
     rec_data = []
     ns = "/uarm_metal/"
-    att_pub = rospy.Publisher(ns + 'attach', Bool, queue_size=10)
-    att_pub.publish(Bool(False))
+    publishers['attach'].publish(Bool(False))
 
     data_sub = rospy.Subscriber(ns + "joint_angles_read", JointAngles, data_callback)
     return data_sub
 
 def start_playback(data):
-    ns = "/uarm_metal/"
-    data_pub = rospy.Publisher(ns + 'joint_angles_write', JointAngles, queue_size=10)
-    att_pub = rospy.Publisher(ns + 'attach', Bool, queue_size=10)
-    att_pub.publish(Bool(True))
-    pub_thread = threading.Thread(target=play, args=(data, data_pub, att_pub))
+    global publishers
+    publishers['attach'].publish(Bool(True))
+    pub_thread = threading.Thread(target=play, args=(data))
     pub_thread.daemon = True
     pub_thread.start()
 
     return data_pub
 
-def play(data, data_pub, att_pub):
+def play(data):
+    global publishers
     rate = rospy.Rate(20)
     for point in data:
-        data_pub.publish(point)
+        publishers['data'].publish(point)
         rate.sleep()
 
-    att_pub.publish(Bool(False))
+    publishers['attach'].publish(Bool(False))
 
     print "Done!"
 
@@ -62,12 +61,12 @@ def stop_ROS_sub(sub):
 
 def on_press(key):
     global rec_data
+    global publishers
     global data_sub
-
     if key == keyboard.Key.esc:
         raise Exception(key)
     elif key.char == '1':
-        start_record()
+        data_sub = start_record()
         print "RECORD"
     elif key.char == '2':
         print "STOP"
@@ -83,6 +82,16 @@ def on_press(key):
 
 if __name__ == '__main__':
     global rec_data
+    global publishers
+    global data_sub
+    data_sub = None
+
+    data_pub = rospy.Publisher(ns + 'joint_angles_write', JointAngles, queue_size=10)
+    att_pub = rospy.Publisher(ns + 'attach', Bool, queue_size=10)
+
+    publishers['data'] = data_pub
+    publishers['attach'] = att_pub
+
     rec_data = []
     ns = "/uarm_metal/"
     rospy.set_param(ns + 'read_joint_angles', 1)
