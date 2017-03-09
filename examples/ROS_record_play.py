@@ -42,13 +42,14 @@ def start_playback(data):
 
 def play(*args):
     global publishers
+    global beeps
     rate = rospy.Rate(20)
     for point in args:
         publishers['data'].publish(point)
         rate.sleep()
 
     publishers['attach'].publish(Bool(False))
-
+    publishers['beep'].publish(beeps['good'])
     print "Done!"
 
 
@@ -61,6 +62,7 @@ def stop_ROS_sub(sub):
         pass
 
 def process_key(key):
+    global beeps
     global rec_data
     global publishers
     global data_sub
@@ -74,10 +76,12 @@ def process_key(key):
         print len(rec_data)
     elif key.char == '3':
         print "PLAY"
+        publishers['beep'].publish(beeps['good'])
         if len(rec_data) > 0:
             start_playback(rec_data)
     elif key.char == '4':
         rec_data = []
+        publishers['beep'].publish(beeps['bad'])
         print "RESET"
 
 def on_press(key):
@@ -94,16 +98,30 @@ def on_press(key):
 if __name__ == '__main__':
     global rec_data
     global publishers
+    global beeps
     global data_sub
     global ns
+
     data_sub = None
+    beeps = {}
+    bp_good = Beep()
+    bp_good.frequency = 12000
+    bp_good.duration = 0.1
+    beeps['good'] = bp_good
+
+    bp_bad = Beep()
+    bp_bad.frequency = 6000
+    bp_bad.duration = 0.2
+    beeps['bad'] = bp_bad
 
     ns = "/uarm_metal/"
     data_pub = rospy.Publisher(ns + 'joint_angles_write', JointAngles, queue_size=10)
     att_pub = rospy.Publisher(ns + 'attach', Bool, queue_size=10)
+    beep_pub = rospy.Publisher(ns + 'beep', Beep, queue_size=10)
     publishers = {}
     publishers['data'] = data_pub
     publishers['attach'] = att_pub
+    publishers['beep'] = beep_pub
 
     rec_data = []
     ns = "/uarm_metal/"
