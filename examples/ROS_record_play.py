@@ -70,12 +70,9 @@ def start_record():
     global rec_data
     rec_data = []
     ns = "/uarm_metal/"
-    # rospy.set_param(ns + 'read_joint_angles', 1)
-    # rospy.set_param(ns + 'read_position', 0)
-    #
-    # rospy.init_node('record_node', anonymous=False)
-    # rospy.Subscriber(ns + "joint_angles_read", JointAngles, data_callback)
-#    rospy.spin()
+
+    rospy.Subscriber(ns + "joint_angles_read", JointAngles, data_callback)
+    rospy.spin()
 
 def on_press(key):
     global rec_data
@@ -97,6 +94,11 @@ def on_press(key):
 if __name__ == '__main__':
     global rec_data
     rec_data = []
+    rospy.set_param(ns + 'read_joint_angles', 1)
+    rospy.set_param(ns + 'read_position', 0)
+
+    rospy.init_node('record_node', anonymous=False)
+
     print "Start."
     with keyboard.Listener(on_press=on_press) as listener:
         try:
