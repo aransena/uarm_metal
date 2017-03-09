@@ -122,25 +122,27 @@ class UarmMetal():
         rospy.set_param('uarm_metal/read_digital_inputs', self.read_DI)
 
     def connect_to_ROS(self):
-        self.string_read_pub = rospy.Publisher('string_read', String, queue_size=10)
-        self.pos_pub = rospy.Publisher('position_read', Position, queue_size=10)
-        self.ja_pub = rospy.Publisher('joint_angles_read', JointAngles, queue_size=10)
-        self.ai_pub = rospy.Publisher('analog_inputs_read', String, queue_size=10)
-        self.di_pub = rospy.Publisher('digital_inputs_read', String, queue_size=10)
-        #  uarm_metal
         ns = 'uarm_metal'
         try:
             print "NAMESP: ", rospy.get_namespace()
         except Exception as e:
             print "Couldn't get ns: ", e
 
-        rospy.Subscriber("string_write", String, self.string_write_callback, queue_size= 1000)
-        rospy.Subscriber("position_write", Position, self.position_write_callback, queue_size=1000)
-        rospy.Subscriber("joint_angles_write", JointAngles, self.ja_write_callback, queue_size=1000)
-        rospy.Subscriber("pump", Bool, self.pump_write_callback, queue_size=1000)
-        rospy.Subscriber("attach", Bool, self.attach_write_callback, queue_size=1000)
-        rospy.Subscriber("beep", Beep, self.beep_write_callback, queue_size=1000)
         rospy.init_node(ns, anonymous=False)
+        self.string_read_pub = rospy.Publisher('string_read', String, queue_size=10)
+        self.pos_pub = rospy.Publisher('position_read', Position, queue_size=10)
+        self.ja_pub = rospy.Publisher('joint_angles_read', JointAngles, queue_size=10)
+        self.ai_pub = rospy.Publisher('analog_inputs_read', String, queue_size=10)
+        self.di_pub = rospy.Publisher('digital_inputs_read', String, queue_size=10)
+        #  uarm_metal
+
+        rospy.Subscriber(ns+"/string_write", String, self.string_write_callback, queue_size= 1000)
+        rospy.Subscriber(ns+"/position_write", Position, self.position_write_callback, queue_size=1000)
+        rospy.Subscriber(ns+"/joint_angles_write", JointAngles, self.ja_write_callback, queue_size=1000)
+        rospy.Subscriber(ns+"/pump", Bool, self.pump_write_callback, queue_size=1000)
+        rospy.Subscriber(ns+"/attach", Bool, self.attach_write_callback, queue_size=1000)
+        rospy.Subscriber(ns+"/beep", Beep, self.beep_write_callback, queue_size=1000)
+
         self.ros_rate = rospy.Rate(self.ros_hz)
 
         rospy.loginfo("Done loading parameters.")
