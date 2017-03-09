@@ -18,6 +18,7 @@ class UarmMetal():
         self.connected = False
         self.ready = False
         self.alive = True
+        self.moving = False
 
         self.ros_rate = None
         self.ros_hz = 0
@@ -36,6 +37,9 @@ class UarmMetal():
 
         self.uarm_interface_thread = None
         self.iq = tspq.ThreadSafePriorityQueue("interface_queue")
+
+        self.move_monitor_thread = None
+        self.mq = tspq.ThreadSafePriorityQueue("move_queue")
 
         self.pos_pub = None
         self.ja_pub = None
@@ -163,18 +167,25 @@ class UarmMetal():
     def start_threads(self):
         rospy.loginfo("Starting threads")
         if self.connected is True:
-            self.uarm_read_thread = threading.Thread(target=self.uarm_read)
-            self.uarm_interface_thread = threading.Thread(target=self.uarm_interface)
-            self.parameter_monitor_thread = threading.Thread(target=self.parameter_monitor)
 
+
+
+
+            self.uarm_read_thread = threading.Thread(target=self.uarm_read)
             self.uarm_read_thread.daemon = True
             self.uarm_read_thread.start()
 
+            self.uarm_interface_thread = threading.Thread(target=self.uarm_interface)
             self.uarm_interface_thread.daemon = True
             self.uarm_interface_thread.start()
 
+            self.parameter_monitor_thread = threading.Thread(target=self.parameter_monitor)
             self.parameter_monitor_thread.daemon = True
             self.parameter_monitor_thread.start()
+
+            self.move_monitor_thread = threading.Thread(target=self.monitor_ja_write)
+            self.move_monitor_thread.daemon = True
+            self.move_monitor_thread.start()
 
             #self.request_detach()
 
@@ -321,9 +332,8 @@ class UarmMetal():
         #     self.iq.send_to_queue(msg)
 
     def ja_write_callback(self, data):
-        self.request_ja(data)
-        while self.uarm.is_moving():
-            time.sleep(0.01)
+        #self.request_ja(data)
+        self.mq.send_to_queue(data)
        # time.sleep(0.05)
 
     def pump_write_callback(self, data):
@@ -349,9 +359,29 @@ class UarmMetal():
 #ACTIONS Action request for uArm
 # Actions
 #endACTIONS
+    def request_move_check(self):
+        self.iq.send_to_queue("CHK",priority=1)
+
     def request_position(self, data):
         msg = "POS" + str(data.x) + "," + str(data.y) + "," + str(data.z)
         self.iq.send_to_queue(msg)
+
+    def monitor_ja_write(self):
+        while True and (rospy.is_shutdown() is False):
+            if self.moving == False and self.mq.queue.qsize()>0:
+                try:
+                    data = self.mq.get_from_queue()
+                    msg = "JA" + str(round(data.j0,0)) + "," + str(round(data.j1,0)) \
+                          + "," + str(round(data.j2,0)) + "," + str(round(data.j3,0))
+                    print msg, map(float, msg[2:].split(','))
+                    self.iq.send_to_queue(msg)
+                    if self.mq.queue.qsize() != 0:
+                        self.request_move_check()
+                except Exception as e:
+                    time.sleep(0.5)
+                    pass
+            else:
+                time.sleep(0.5)
 
     def request_ja(self, data):
         msg = "JA" + str(round(data.j0,0)) + "," + str(round(data.j1,0)) \
@@ -408,6 +438,8 @@ class UarmMetal():
 # SETS
     @ros_try_catch
     def process_command(self, command):
+        if command == "CHK":
+            self.moving = self.uarm.is_moving()
         if command == "PUMP_ON":
             self.uarm.set_pump(1)
 
