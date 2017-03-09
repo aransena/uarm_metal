@@ -428,10 +428,13 @@ class UarmMetal():
             adjust = float(command[3:])
             self.uarm.set_position(x=0, y=0, z=adjust, speed=0, relative=True)
 
+
         if command[0:2] == "JA":  # and self.playback_active:
             angle = map(float, command[2:].split(','))
             for i in range(0, len(angle)):
                 self.uarm.set_servo_angle(i, angle[i])
+
+            time.sleep(0.05)
 
         if command[0:4] == "BEEP":
             try:
