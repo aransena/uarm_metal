@@ -206,6 +206,7 @@ class UarmMetal():
 
     def uarm_interface(self):
         rospy.loginfo("uarm_interface running")
+
         while True and (rospy.is_shutdown() is False):
             request = self.iq.get_from_queue()
 
@@ -227,7 +228,7 @@ class UarmMetal():
                 self.process_command(request)
                 #if self.playback_active is False and self.loading is False:
                 self.iq.send_to_queue("READ")
-            time.sleep(0.1)
+
 
         rospy.loginfo("uarm_interface shutdown")
         self.shutdown()
@@ -434,7 +435,7 @@ class UarmMetal():
             angle = map(float, command[2:].split(','))
             for i in range(0, len(angle)):
                 self.uarm.set_servo_angle(i, angle[i])
-
+            self.ros_rate.sleep()
             #time.sleep(0.2)
 
         if command[0:4] == "BEEP":
