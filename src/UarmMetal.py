@@ -322,7 +322,7 @@ class UarmMetal():
 
     def ja_write_callback(self, data):
         self.request_ja(data)
-        time.sleep(0.05)
+       # time.sleep(0.05)
 
     def pump_write_callback(self, data):
         if data.data:
