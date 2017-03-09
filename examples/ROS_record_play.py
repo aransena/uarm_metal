@@ -83,6 +83,7 @@ def process_key(key):
 
 def on_press(key):
     try:
+        key.char
         process_key(key)
     except:
         print "Key cannot be processed"
