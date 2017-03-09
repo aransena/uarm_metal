@@ -89,12 +89,13 @@ if __name__ == '__main__':
     rospy.set_param('/uarm_metal/read_position', 0)
     rospy.set_param('/uarm_metal/read_digital_inputs', [0,0])
     rospy.set_param('/uarm_metal/read_analog_inputs', [0,0])
+    #  /uarm_metal/
+    ja_pub = rospy.Publisher('joint_angles_write', JointAngles, queue_size=10)
+    att_pub = rospy.Publisher('attach', Bool, queue_size=10)
+    beep_pub = rospy.Publisher('beep', Beep, queue_size=10)
 
-    ja_pub = rospy.Publisher('/uarm_metal/joint_angles_write', JointAngles, queue_size=10)
-    att_pub = rospy.Publisher('/uarm_metal/attach', Bool, queue_size=10)
-    beep_pub = rospy.Publisher('/uarm_metal/beep', Beep, queue_size=10)
-
-    rospy.Subscriber("/uarm_metal/joint_angles_read", JointAngles, data_callback)
+    #  / uarm_metal /
+    rospy.Subscriber("joint_angles_read", JointAngles, data_callback)
     rospy.init_node('record_play_node', anonymous=True)
 
     rw_rate = 1000.0
