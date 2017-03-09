@@ -100,7 +100,7 @@ if __name__ == '__main__':
     ns = "/uarm_metal/"
     data_pub = rospy.Publisher(ns + 'joint_angles_write', JointAngles, queue_size=10)
     att_pub = rospy.Publisher(ns + 'attach', Bool, queue_size=10)
-
+    publishers = {}
     publishers['data'] = data_pub
     publishers['attach'] = att_pub
 
