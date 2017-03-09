@@ -360,7 +360,7 @@ class UarmMetal():
 # Actions
 #endACTIONS
     def request_move_check(self):
-        self.iq.send_to_queue("CHK",priority=1)
+        self.iq.send_to_queue("CHK", priority=1)
 
     def request_position(self, data):
         msg = "POS" + str(data.x) + "," + str(data.y) + "," + str(data.z)
@@ -368,6 +368,7 @@ class UarmMetal():
 
     def monitor_ja_write(self):
         while True and (rospy.is_shutdown() is False):
+            print self.moving
             if self.moving == False and self.mq.queue.qsize()>0:
                 try:
                     data = self.mq.get_from_queue()
@@ -381,7 +382,7 @@ class UarmMetal():
                     time.sleep(0.5)
                     pass
             else:
-                time.sleep(0.5)
+                time.sleep(0.01)
 
     def request_ja(self, data):
         msg = "JA" + str(round(data.j0,0)) + "," + str(round(data.j1,0)) \
