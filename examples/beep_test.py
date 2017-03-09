@@ -14,7 +14,7 @@ def shutdown_signal_handler(signal, frame):
 if __name__ == '__main__':
     global exit
     signal.signal(signal.SIGINT, shutdown_signal_handler)
-    print 'Ctrl+C or q to exit'
+    print 'Ctrl+C to exit'
     exit = False
 
     ns = "/uarm_metal/"
@@ -22,7 +22,7 @@ if __name__ == '__main__':
     rospy.init_node('record_play_node', anonymous=False)
     beep_pub = rospy.Publisher(ns + 'beep', Beep, queue_size=10)
 
-    rate = rospy.Rate(0.2)
+    rate = rospy.Rate(20)
 
     bp = Beep()
     bp.frequency = 12000
