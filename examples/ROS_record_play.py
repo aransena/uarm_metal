@@ -94,6 +94,8 @@ def on_press(key):
         print "RESET"
 
 if __name__ == '__main__':
+    global rec_data
+    rec_data = []
     print "Start."
     with keyboard.Listener(on_press=on_press) as listener:
         try:
