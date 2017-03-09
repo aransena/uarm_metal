@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import signal
-# import rospy
+import rospy
 from pynput import keyboard
 # from std_msgs.msg import String, Bool
 from uarm_metal.msg import JointAngles, Beep
@@ -68,6 +68,7 @@ def process(key):
 def start_record():
     global rec_data
     rec_data = []
+    ns = "/uarm_metal/"
     rospy.init_node('record_node', anonymous=False)
     rospy.Subscriber(ns + "joint_angles_read", JointAngles, data_callback)
     rospy.spin()
