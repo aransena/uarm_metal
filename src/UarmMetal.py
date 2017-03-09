@@ -134,12 +134,12 @@ class UarmMetal():
         except Exception as e:
             print "Couldn't get ns: ", e
 
-        rospy.Subscriber(ns+"/string_write", String, self.string_write_callback, queue_size= 1000)
-        rospy.Subscriber(ns+"/position_write", Position, self.position_write_callback, queue_size=1000)
-        rospy.Subscriber(ns+"/joint_angles_write", JointAngles, self.ja_write_callback, queue_size=1000)
-        rospy.Subscriber(ns+"/pump", Bool, self.pump_write_callback, queue_size=1000)
-        rospy.Subscriber(ns+"/attach", Bool, self.attach_write_callback, queue_size=1000)
-        rospy.Subscriber(ns+"/beep", Beep, self.beep_write_callback, queue_size=1000)
+        rospy.Subscriber("string_write", String, self.string_write_callback, queue_size= 1000)
+        rospy.Subscriber("position_write", Position, self.position_write_callback, queue_size=1000)
+        rospy.Subscriber("joint_angles_write", JointAngles, self.ja_write_callback, queue_size=1000)
+        rospy.Subscriber("pump", Bool, self.pump_write_callback, queue_size=1000)
+        rospy.Subscriber("attach", Bool, self.attach_write_callback, queue_size=1000)
+        rospy.Subscriber("beep", Beep, self.beep_write_callback, queue_size=1000)
         rospy.init_node(ns, anonymous=False)
         self.ros_rate = rospy.Rate(self.ros_hz)
 
