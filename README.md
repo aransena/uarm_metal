@@ -23,7 +23,11 @@ rosrun uarm_metal uarm.py
 ## ROS Topics
 There are 11 ROS topics that can be used to interact with the robot.
 
-Due to the serial link to the robot meaning we cannot read/write rapidly or concurrently, the package is designed to have only the required topics active at any one time. As more topics become active, there will be more read/write requests to the robot, thus reducing the communication speed. Topic activity versus communication performance is discussed further later.
+Due to the serial link to the robot meaning we cannot read/write rapidly or concurrently, the package is designed to
+have only the required topics active at any one time and manages the read/write process to avoid conflicts.
+As more topics become active, there will be more read/write requests to the robot, thus reducing the communication
+speed. Topic activity versus communication performance is
+discussed further later.
 
 Topics:
 ```
@@ -40,6 +44,27 @@ Topics:
 /uarm_metal/string_write <- Unused
 ```
 
+## uarm_metal Custom Data Types
+
+### uarm_metal/Position
+```
+float32 x
+float32 z
+float32 y
+```
+### uarm_metal/JointAngles
+```
+float32 j0
+float32 j1
+float32 j2
+float32 j3
+```
+### uarm_metal/Beep
+```
+float32 frequency
+float32 duration
+```
+
 ## ROS Params
 There are 4 rosparams you can set through either the terminal or in code.
 
@@ -50,7 +75,8 @@ There are 4 rosparams you can set through either the terminal or in code.
 /uarm_metal/read_position
 ```
 
-read_analog_inputs and read_digital_inputs take lists as input, where the first digit indicates Off/On [0/1] and the following comma separated digits indicate the relevant pin you wish to measure.
+read_analog_inputs and read_digital_inputs take lists as input, where the first digit indicates Off/On [0/1] and the
+following comma separated digits indicate the relevant pin you wish to measure.
 
 e.g. to measure analog pins 7 & 8
 
@@ -69,4 +95,10 @@ rosparam set /uarm_metal/read_joint_angles 1
 ```
 
 
-# Description
+# Notes
+## Performance
+Reading exclusively cartesian end-effector coordinates from the robot will produce a ~70Hz update rate. With each
+additional topic that is read, or rapidly written to (e.g. reading position and joint angles at the same time), will
+result in a drop in communication rate.
+
+For example, reading joint angles, and two analog inputs will drop the read rate to ~20Hz.
