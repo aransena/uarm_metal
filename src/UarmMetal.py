@@ -19,6 +19,9 @@ class UarmMetal():
         self.ready = False
         self.alive = True
         self.moving = False
+        self.msg_cnt = 0
+        self.jmsg_cnt = 0
+        self.wait = False
 
         self.ros_rate = None
         self.ros_hz = 0
@@ -38,8 +41,11 @@ class UarmMetal():
         self.uarm_interface_thread = None
         self.iq = tspq.ThreadSafePriorityQueue("interface_queue")
 
-        self.move_monitor_thread = None
-        self.mq = tspq.ThreadSafePriorityQueue("move_queue")
+        self.joint_move_monitor_thread = None
+        self.jmq = tspq.ThreadSafePriorityQueue("move_queue")
+
+        self.position_move_monitor_thread = None
+        self.pmq = tspq.ThreadSafePriorityQueue("move_queue")
 
         self.pos_pub = None
         self.ja_pub = None
@@ -128,7 +134,7 @@ class UarmMetal():
     def connect_to_ROS(self):
         ns = 'uarm_metal'
         try:
-            print "NAMESP: ", rospy.get_namespace()
+            print "NAMESPACE: ", rospy.get_namespace()
         except Exception as e:
             print "Couldn't get ns: ", e
 
@@ -168,9 +174,6 @@ class UarmMetal():
         rospy.loginfo("Starting threads")
         if self.connected is True:
 
-
-
-
             self.uarm_read_thread = threading.Thread(target=self.uarm_read)
             self.uarm_read_thread.daemon = True
             self.uarm_read_thread.start()
@@ -183,11 +186,13 @@ class UarmMetal():
             self.parameter_monitor_thread.daemon = True
             self.parameter_monitor_thread.start()
 
-            self.move_monitor_thread = threading.Thread(target=self.monitor_ja_write)
-            self.move_monitor_thread.daemon = True
-            self.move_monitor_thread.start()
+            self.joint_move_monitor_thread = threading.Thread(target=self.monitor_ja_write)
+            self.joint_move_monitor_thread.daemon = True
+            self.joint_move_monitor_thread.start()
 
-            #self.request_detach()
+            self.position_move_monitor_thread = threading.Thread(target=self.monitor_position_write)
+            self.position_move_monitor_thread.daemon = True
+            self.position_move_monitor_thread.start()
 
         else:
             rospy.logerr("Startup error")
@@ -236,7 +241,6 @@ class UarmMetal():
                 break
             else:
                 self.process_command(request)
-                #if self.playback_active is False and self.loading is False:
                 self.iq.send_to_queue("READ",priority=1)
 
         rospy.loginfo("uarm_interface shutdown")
@@ -326,15 +330,12 @@ class UarmMetal():
                 self.iq.send_to_queue(data.data)
 
     def position_write_callback(self, data):
-        self.request_position(data)
-        # if data.data[0]:
-        #     msg = data.data[1:]
-        #     self.iq.send_to_queue(msg)
+        self.pmq.send_to_queue(data, priority=10+self.msg_cnt)
+        self.msg_cnt+=1
 
     def ja_write_callback(self, data):
-        #self.request_ja(data)
-        self.mq.send_to_queue(data)
-       # time.sleep(0.05)
+        self.jmq.send_to_queue(data, priority=10+self.jmsg_cnt)
+        self.jmsg_cnt += 1
 
     def pump_write_callback(self, data):
         if data.data:
@@ -352,9 +353,6 @@ class UarmMetal():
     def beep_write_callback(self, data):
         print data
         self.request_beep(data)
-        # if data.data[0]:
-        #     msg = data.data[1:]
-        #     self.iq.send_to_queue(msg)
 
 #ACTIONS Action request for uArm
 # Actions
@@ -366,27 +364,33 @@ class UarmMetal():
         msg = "POS" + str(data.x) + "," + str(data.y) + "," + str(data.z)
         self.iq.send_to_queue(msg)
 
+    def monitor_position_write(self):
+        while True and (rospy.is_shutdown() is False):
+            if self.pmq.queue.qsize()>0:
+                while self.wait: # reset to False in process_command in the POS case
+                    time.sleep(0.01)
+                data = self.pmq.get_from_queue()
+                self.request_position(data)
+                self.wait = True
+                self.msg_cnt+=1
+            else:
+                self.msg_cnt = 0
+                time.sleep(1)
+
     def monitor_ja_write(self):
         while True and (rospy.is_shutdown() is False):
-            print self.mq.queue.qsize(), self.moving
-            if self.moving == False and self.mq.queue.qsize()>0:
-                # try:
-                data = self.mq.get_from_queue()
-                msg = "JA" + str(round(data.j0,0)) + "," + str(round(data.j1,0)) \
-                      + "," + str(round(data.j2,0)) + "," + str(round(data.j3,0))
-                print msg, map(float, msg[2:].split(','))
+            if self.jmq.queue.qsize()>0:
+                while self.wait: # reset to False in process_command in the JA case
+                    time.sleep(0.01)
+                data = self.jmq.get_from_queue()
+                msg = "JA" + str(round(data.j0,2)) + "," + str(round(data.j1,2)) \
+                      + "," + str(round(data.j2,2)) + "," + str(round(data.j3,2))
                 self.iq.send_to_queue(msg)
-                time.sleep(0.5)
-                if self.mq.queue.qsize() > 0:
-                    print "CHK"
-                    self.request_move_check()
-
-                # except Exception as e:
-                #     time.sleep(0.5)
-                #     pass
+                self.wait = True
+                self.jmsg_cnt += 1
             else:
-                #print self.moving
-                time.sleep(0.01)
+                self.jmsg_cnt = 0
+                time.sleep(1)
 
     def request_ja(self, data):
         msg = "JA" + str(round(data.j0,2)) + "," + str(round(data.j1,2)) \
@@ -457,9 +461,10 @@ class UarmMetal():
         if command == "DET":
             self.uarm.set_servo_detach()
 
-        if command[0:3] == "POS":  # and self.playback_active:
+        if command[0:3] == "POS":
             position = map(float, command[3:].split(','))
-            self.uarm.set_position(position[0], position[1], position[2])
+            self.uarm.set_position(position[0], position[1], position[2], wait=True)
+            self.wait = False
 
         if command[0:2] == "WR":
             angle = float(command[2:])
@@ -470,12 +475,11 @@ class UarmMetal():
             self.uarm.set_position(x=0, y=0, z=adjust, speed=0, relative=True)
 
 
-        if command[0:2] == "JA":  # and self.playback_active:
+        if command[0:2] == "JA":
             angle = map(float, command[2:].split(','))
             for i in range(0, len(angle)):
-                self.uarm.set_servo_angle(i, angle[i])
-
-            #time.sleep(0.2)
+                self.uarm.set_servo_angle(i, angle[i], wait=True)
+            self.wait = False
 
         if command[0:4] == "BEEP":
             try:
@@ -492,15 +496,3 @@ class UarmMetal():
             self.iq.filter_queue(msg_filter="READ")
             time.sleep(0.5)
             self.iq.filter_queue(msg_filter="JA")
-
-
-            # if command[0:4] == "LOAD":
-            #     self.load_playback_data(command[4:])
-
-            # if command == "PLAY":
-            #     if self.playback_data:
-            #         self.playback_active = True
-            #         self.playback_thread = threading.Thread(target=self.playback)
-            #         self.playback_thread.daemon = True
-
-            # self.playback_thread.start()
