@@ -31,15 +31,15 @@ discussed further later.
 
 Topics:
 ```
-/uarm_metal/attach <- std_msgs/Bool <- Publish Bool to this to attach/detach
-/uarm_metal/beep <- uarm_metal/Beep <- Publish Beep message type to this to beep
-/uarm_metal/pump <- std_msgs/Bool <- Publish Bool to this to turn On/Off
-/uarm_metal/joint_angles_read <- uarm_metal/JointAngles <- Subscribe to this to read robot joint angles as JointAngle type
-/uarm_metal/joint_angles_write <- uarm_metal/JointAngles <- Publish JointAngle type messages to this to control robot (must first attach)
-/uarm_metal/position_read <- uarm_metal/Position <- Subscribe to this to read robot end effector coordinates as Position type
-/uarm_metal/position_write <- uarm_metal/Position <- Publish Position type messages to this to control robot (must first attach)
-/uarm_metal/analog_inputs_read <- std_msgs/String <- Subscribe to this to read robot analog input pins as CSV std_msgs/String type
-/uarm_metal/digital_inputs_read <- std_msgs/String <- Subscribe to this to read robot digital input pins as CSV std_msgs/String type
+/uarm_metal/attach <- std_msgs/Bool <- True/False attach/detach
+/uarm_metal/beep <- uarm_metal/Beep
+/uarm_metal/pump <- std_msgs/Bool <- True/False On/Off
+/uarm_metal/joint_angles_read <- uarm_metal/JointAngles <- Subscribe to this to read robot joint angles
+/uarm_metal/joint_angles_write <- uarm_metal/JointAngles <- Publish to this to control robot (must first attach)
+/uarm_metal/position_read <- uarm_metal/Position <- Subscribe to this to read robot end effector coordinates
+/uarm_metal/position_write <- uarm_metal/Position <- Publish to this to control robot (must first attach)
+/uarm_metal/analog_inputs_read <- std_msgs/String <- Subscribe to this to read robot analog input pins as CSV strings
+/uarm_metal/digital_inputs_read <- std_msgs/String <- Subscribe to this to read robot digital input pins as CSV strings
 /uarm_metal/string_read <- Unused
 /uarm_metal/string_write <- Unused
 ```
