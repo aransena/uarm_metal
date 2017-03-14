@@ -74,6 +74,7 @@ def play(*args):
         publishers['data'].publish(point)
         rate.sleep()
 
+
 def stop_ROS_sub(sub):
     try:
         # stop receiving data when idle
@@ -134,7 +135,10 @@ if __name__ == '__main__':
     # POS - data playback using robot recorded end-effector positions (tends to be jerky)
     # JA - data playback using servo recorded joint angles (tends to be a bit smoother)
     playback_type = 'JA'
-    print "Mode: ", playback_type
+    if playback_type == 'JA':
+        print "Mode: Joint Angle record and playback"
+    else:
+        print "Mode: End Effector XYZ coordinates record and playback"
     rec_data = []
     publishers = {}
     beeps = {}
