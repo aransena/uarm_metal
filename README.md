@@ -43,6 +43,7 @@ Topics:
 /uarm_metal/string_read <- Unused
 /uarm_metal/string_write <- Unused
 ```
+![alt text](https://cloud.githubusercontent.com/assets/9334388/23900016/748ca194-08af-11e7-8bcc-203d5d1ebde6.png)
 
 ## uarm_metal Custom Data Types
 
@@ -97,8 +98,45 @@ rosparam set /uarm_metal/read_joint_angles 1
 
 # Notes
 ## Performance
-Reading exclusively cartesian end-effector coordinates from the robot will produce a ~70Hz update rate. With each
-additional topic that is read, or rapidly written to (e.g. reading position and joint angles at the same time), will
-result in a drop in communication rate.
+Performance will vary depending on your system. The figures here are based on testing in a Ubuntu 14.04 virtual machine with ROS Indigo (3Gb RAM), on an i7 Windows 10 laptop.
 
-For example, reading joint angles, and two analog inputs will drop the read rate to ~20Hz.
+Reading exclusively cartesian end-effector coordinates from the robot will produce a ~50-60Hz update rate. With each
+additional topic that is read, or rapidly written to (e.g. reading position and joint angles at the same time), will
+result in a drop in communication rate. This drop in communication rate is due to the communications bottle neck with the uarm control board not allowing simultaneous read/writes. 
+
+Reading XYZ coordinates and Joint Angles simultaneously gives an update rate of ~28-30Hz.
+
+Reading XYZ, Joint Angles, and two analog pins gives an update rate of ~17-18Hz.
+
+Reading Position, and one analog input will give a read rate to ~35Hz.
+
+Reading Joint Angles while also writing Joint Angles@30Hz will give a read rate of ~42Hz.
+
+## Issues
+While this uarm_metal package manages read/write requests to avoid communications conflicts, there still appears to be some firmware bugs on the uArm.
+
+These bugs have been identified by other uArm users and appear something like this:
+```
+pyuarm - ERROR - Communication| ERROR: send #100 P200
+```
+Unfortunately there is no way to get out of this error once it has started; however this package will catch this error and shut down the node. As a work around, if the node is started from a launch file with the respawn parameter set to true, the node will restart and reconnect to the uArm.
+
+```
+<launch>
+	<node name="uarm_metal" pkg="uarm_metal" type="uarm.py" respawn="true"/>
+</launch>
+```
+
+From this url [https://forum.ufactory.cc/t/pyuarm-usb-errors-and-skipping-moves/567/2] it appears to be something that will be fixed in upcoming updates; however uFactory have stated pyuarm will move to Python3 exclusively. This move to Python3 may prove probelematic for this package in future...
+
+# Example: Record and Playback Node
+An example of a node offering record and playback functionality is found in ../examples/ROS_record_play.py. To run the example, start up the main uarm_metal node uarm.py and then:
+```
+rosrun uarm_metal ROS_record_play.py
+```
+If you cannot find the file from rosrun make sure you have set permissions for it (sudo chmod a+x ROS_record_play.py.
+
+![alt text](https://cloud.githubusercontent.com/assets/9334388/23900017/749e97aa-08af-11e7-9f06-50a6cd7acb4e.png)
+
+# TODO
+The main TODO on the list will be to try allow for RViz integration like the original ROS package. Hopefully I can get around to this over the next month or two.
