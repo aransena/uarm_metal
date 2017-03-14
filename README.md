@@ -45,7 +45,7 @@ Topics:
 ```
 ![alt text](https://cloud.githubusercontent.com/assets/9334388/23900016/748ca194-08af-11e7-8bcc-203d5d1ebde6.png)
 
-## uarm_metal Custom Data Types
+## uarm_metal Custom Message Types
 
 ### uarm_metal/Position
 ```
