@@ -19,6 +19,17 @@ To start the interface:
  ```
 rosrun uarm_metal uarm.py
 ```
+## Settings File
+In uarm_metal/src you'll find a file settings.txt where you can set what data is read from the robot (the alternative is programatically setting this using ROS parameters in the console or in code, see below).
+
+For example, here the settings file is set up to read the XYZ coordinates (read_pos, 1), and read digital inputs 1 & 3 (read_digital_inputs,1,1,3). For reading digital inputs or analog inputs, you pass a list of numbers where the first digit indicates On/Off and the following digits indicate the specific pins you want.
+```
+ros_hz, 1000.0,
+read_pos,1,
+read_ja,0,
+read_analog_inputs,0,7,8,
+read_digital_inputs,0,1,3,
+```
 
 ## ROS Topics
 There are 11 ROS topics that can be used to interact with the robot.
@@ -79,6 +90,7 @@ There are 4 rosparams you can set through either the terminal or in code.
 read_analog_inputs and read_digital_inputs take lists as input, where the first digit indicates Off/On [0/1] and the
 following comma separated digits indicate the relevant pin you wish to measure.
 
+### Terminal Examples
 e.g. to measure analog pins 7 & 8
 
 ```
@@ -94,7 +106,11 @@ e.g. to read joint angles from the uArm
 ```
 rosparam set /uarm_metal/read_joint_angles 1
 ```
-
+### rospy Examples
+e.g. Using rospy to turn off reading joint angles
+```
+rospy.set_param('/uarm_metal/read_joint_angles', 1)
+```
 
 # Notes
 ## Performance
