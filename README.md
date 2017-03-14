@@ -109,7 +109,7 @@ rosparam set /uarm_metal/read_joint_angles 1
 ### rospy Examples
 e.g. Using rospy to turn off reading joint angles
 ```
-rospy.set_param('/uarm_metal/read_joint_angles', 1)
+rospy.set_param('/uarm_metal/read_joint_angles', 0)
 ```
 
 # Notes
